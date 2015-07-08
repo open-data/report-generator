@@ -1,0 +1,22 @@
+{
+  "name": "report-generator",
+  "version": "0.0.0",
+  "authors": [
+    "Laurent Goderre <laurent.goderre@gmail.com>"
+  ],
+  "main": "index.html",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "wet-boew": "wet-boew/wet-boew-cdn#v4.0-dist",
+    "theme-gc-intranet": "wet-boew/themes-cdn#theme-gc-intranet",
+    "angular": "~1.4.2"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "report-generator",
+  "version": "0.0.0",
+  "main": "index.html",
+  "repository": "",
+  "author": "Laurent Goderre <laurent.goderre@gmail.com>,
+  "license": "MIT",
+  "dependencies": {}
+}

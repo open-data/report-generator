@@ -1,0 +1,7 @@
+<div class="col-md-2 col-sm-3 col-xs-6" data-ng-repeat="org in orgCtrl.organizations">
+    <label class="checkbox-inline" for="{{org}}">
+        <input type="checkbox" id="{{org}}" checklist-model="orgCtrl.selectedOrganizations" checklist-value="org" checklist-change="orgCtrl.changed()" /> {{org}}
+    </label>
+</div>
+    
+    
