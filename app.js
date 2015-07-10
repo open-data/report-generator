@@ -12,7 +12,7 @@
     }
     
     function createQuery(keywords) {
-        keywords = keywords.replace(/(.*?)((?:\+(?:OR|AND)\+)|$)/g, function(match, key, sep) {
+        keywords = keywords.replace(/(.*?)((?: (?:OR|AND) )|$)/g, function(match, key, sep) {
             if (key.length !== 0 && !key.match(/:[\(\[].*?[\)\]]/)) {
                 key = 'entext:(' + key + ')';
             }

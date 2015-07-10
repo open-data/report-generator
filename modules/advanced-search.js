@@ -16,7 +16,7 @@
                     this.field +':(*' + this.keyword + '*)';
                 
                 if ($rootScope.query && $rootScope.query.trim() !== '') {
-                    actualOperator = "+" + (this.emptyKey ? 'AND' : this.operator) + "+";
+                    actualOperator = " " + (this.emptyKey ? 'AND' : this.operator) + " ";
                 }
                 
                 $rootScope.query = ($rootScope.query || '') + actualOperator + expr;
