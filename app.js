@@ -60,9 +60,7 @@
         return fieldsMapping;
     }
     
-    app.run(['$http', '$rootScope', '$controller', function($http, $rootScope, $controller) {
-        //var organizationController = $controller('OrganizationsController as orgCtrl');
-
+    app.run(['$http', '$rootScope', function($http, $rootScope) {
         $rootScope.sendQuery = function() {
             var url = 'http://ndmckanq1.stcpaz.statcan.gc.ca/so04/select',
                 params = {
