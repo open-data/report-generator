@@ -3,6 +3,24 @@
     
     var $resultsTable = $('#results');
     
+    function createOrganizationList(orgs) {
+        return orgs.join(' OR ');
+    }
+    
+    function createFieldsList(fields) {
+        return fields.join(',');
+    }
+    
+    function createQuery(keywords) {
+        keywords = keywords.replace(/(.*?)((?:\+(?:OR|AND)\+)|$)/g, function(match, key, sep) {
+            if (key.length !== 0 && !key.match(/:[\(\[].*?[\)\]]/)) {
+                key = 'entext:(' + key + ')';
+            }
+            return key + sep;
+        });
+        return keywords;
+    }
+    
     function sanitizeData(rows, fields) {
         var row, r, field, f, cell;
         
@@ -38,19 +56,20 @@
         return fieldsMapping;
     }
     
-    app.run(['$http', '$rootScope', function($http, $rootScope) {
+    app.run(['$http', '$rootScope', '$controller', function($http, $rootScope, $controller) {
+        //var organizationController = $controller('OrganizationsController as orgCtrl');
+
         $rootScope.sendQuery = function() {
             var url = 'http://ndmckanq1.stcpaz.statcan.gc.ca/so04/select',
                 params = {
-                    'solr-inst': '/so04',
-                    'ckan-inst': '/zj',
-                    otherparams: '',
-                    org: 'maformat+OR+maindb+OR+maprimary',
-                    q: 'entext:(iron)',
-                    fl: 'extras_10uid_bi_strs,extras_conttype_en_txtm,extras_title_en_txts,extras_subjnew_en_txtm,extras_pkuniqueidcode_bi_strs,extras_zckstatus_bi_txtm',
-                    rows: 1000,
                     'wt': 'json',
-                    'json.wrf': 'JSON_CALLBACK'
+                    'json.wrf': 'JSON_CALLBACK',
+                    otherparams: '',
+                    fq: 'zckownerorg_bi_strs:' + createOrganizationList($rootScope.orgCtrl.selectedOrganizations),
+                    q: createQuery($rootScope.query),
+                    fl: createFieldsList($rootScope.dspFieldCtrl.fields),
+                    rows: 1000
+                    
                 };
             
             $http.jsonp(url, {params: params})
