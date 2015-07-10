@@ -4,7 +4,7 @@
     app.controller('DisplayFieldsController',['$rootScope', function($rootScope) {
         this.field = '';
         this.fields = [
-            'extras_10uid_bi_strs',
+            'name',
             'extras_conttype_en_txtm',
             'extras_title_en_txts',
             'extras_subjnew_en_txtm',

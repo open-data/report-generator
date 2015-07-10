@@ -8,7 +8,7 @@
         this.fields = [];
         
         $rootScope.$on('organization.selected', function(event, selectedOrganizations) {
-            var fieldsRequest = 'http://ndmckanq1.stcpaz.statcan.gc.ca/so04/select?q=*&rows=1&fl=extras_*&wt=json&json.wrf=JSON_CALLBACK&fq=extras_zckownerorg_bi_strs:',
+            var fieldsRequest = 'http://ndmckanq1.stcpaz.statcan.gc.ca/so04/select?q=*&rows=1&fl=extras_*,name&wt=json&json.wrf=JSON_CALLBACK&fq=extras_zckownerorg_bi_strs:',
                 fieldsCallback = function(data){
                     var fq = data.responseHeader.params.fq,
                         org = fq.substr(fq.indexOf(':') + 1);
