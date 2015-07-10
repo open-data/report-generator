@@ -13,7 +13,7 @@
             if (this.field && (this.keyword || this.emptyKey) ) {
                 expr = this.emptyKey ? 
                     '-' + this.field + ":" + '["" TO *]' : 
-                    this.field +'(*' + this.keyword + '*)';
+                    this.field +':(*' + this.keyword + '*)';
                 
                 if ($rootScope.query && $rootScope.query.trim() !== '') {
                     actualOperator = "+" + (this.emptyKey ? 'AND' : this.operator) + "+";
