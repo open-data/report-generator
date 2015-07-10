@@ -18,7 +18,7 @@
         <tbody>
             <tr ng-repeat="field in dspFieldCtrl.fields">
                 <th>{{field}}</th>
-                <td><button type="button" class="btn btn-default" ng-click="dspFieldCtrl.removeField(field)"><span class=" glyphicon glyphicon-trash"></span><span class="wb-inv">Delete</span></button></td>
+                <td><button type="button" class="btn btn-default" ng-click="dspFieldCtrl.removeField(field)" ng-hide="dspFieldCtrl.getMandatory(field)"><span class=" glyphicon glyphicon-trash"></span><span class="wb-inv">Delete</span></button></td>
             </tr>
         </tbody>
     </table>

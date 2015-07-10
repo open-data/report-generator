@@ -10,10 +10,17 @@
             'extras_subjnew_en_txtm',
             'extras_pkuniqueidcode_bi_strs',
             'extras_zckstatus_bi_txtm'   
+        ]
+        this.mandatoryFields = [
+            'name'
         ];
         
         this.getVisible = function() {
             return this.fields.length !== 0;
+        }
+        
+        this.getMandatory = function(field) {
+            return this.mandatoryFields.indexOf(field) !== -1;
         }
         
         this.addField = function() {
