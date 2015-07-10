@@ -41,6 +41,8 @@
                             _this.fields.push(val);
                         }
                     });
+                    
+                    _this.fields.sort();
                 });
         });
     }]);
