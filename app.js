@@ -33,7 +33,11 @@
                 
                 row[field] = cell || '';
                 
-                if (typeof cell === 'object') {
+                if( field === 'name') {
+                    row[field] = '<a target="_blank" href="http://ndmckanq1.stcpaz.statcan.gc.ca/zj/dataset/' + cell + '">' + cell + '</a><br>' +
+                        '<a target="_blank" href="http://ndmckanq1.stcpaz.statcan.gc.ca/zj/dataset/edit/' + cell +'#field-extras-1-key" class="btn btn-default">' +
+                            '<span class="glyphicon glyphicon-pencil"><span class="wb-inv">Edit ' + cell + '</span></a>'
+                } else if (typeof cell === 'object') {
                     row[field] = cell.join(',');
                 }
             }
