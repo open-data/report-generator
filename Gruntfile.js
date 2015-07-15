@@ -70,7 +70,16 @@ module.exports = function (grunt) {
                 ext: '.min.js',
                 expand: true
             }
+        },
+        
+        'gh-pages': {
+			options: {
+				base: "dist"
+			},
+			src: "**/*.*"
         }
     });
+    
     grunt.registerTask('default', ['clean', 'copy', 'concat', 'uglify']);
+    grunt.registerTask('deploy', ['default', 'gh-pages']);
 }
