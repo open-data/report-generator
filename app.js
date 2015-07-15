@@ -61,6 +61,15 @@
     }
     
     app.run(['$http', '$rootScope', function($http, $rootScope) {
+        function maxResultsFromUrl() {
+            var maxResults = wb.pageUrlParts.params['rows'];
+            
+            if ($rootScope.maxResultsOptions[maxResults]) {
+                return maxResults;
+            }
+        }
+    
+        $rootScope.query = wb.pageUrlParts.params['q'] || '';
         $rootScope.maxResultsOptions = {
             20: 20, 
             50: 50, 
@@ -68,7 +77,7 @@
             1000: '1000 (default)', 
             2000: 2000
         };
-        $rootScope.maxResults = '1000';
+        $rootScope.maxResults = maxResultsFromUrl() || '1000';
         
         $rootScope.sendQuery = function() {
             var url = 'http://ndmckanq1.stcpaz.statcan.gc.ca/so04/select',
@@ -246,7 +255,7 @@ angular.module('checklist-model', [])
                     actualOperator = " " + (this.emptyKey ? 'AND' : this.operator) + " ";
                 }
                 
-                $rootScope.query = ($rootScope.query || '') + actualOperator + expr;
+                $rootScope.query += actualOperator + expr;
                 
                 this.keyword = '';
                 this.field = '';
@@ -277,12 +286,54 @@ if (!String.prototype.trim) {
 }    
 
 })(window, window.angular);
-(function(window, angular){'use strict';
+(function(window, angular, wb){'use strict';
     var app = angular.module('display-fields', ['fields']);
     
-    app.controller('DisplayFieldsController',['$rootScope', function($rootScope) {
+    app.controller('DisplayFieldsController',['$rootScope', '$scope', function($rootScope, $scope) {
+        var _this = this;
+        
+        function fromUrl() {
+            var displayFields = wb.pageUrlParts.params['fl'],
+                fields
+                
+            if (displayFields) {
+                fields = [].concat(_this.mandatoryFields);
+                displayFields.split(',').forEach(function(field) {
+                    if (fields.indexOf(field) === -1) {
+                        fields.push(field);
+                    }
+                });
+                
+                //Remove fields that are not reckognized;
+                $rootScope.$on('organization.selected', function(event) {
+                    setTimeout(function() {
+                        var fields = $("#displayfield").scope().fieldsCtrl.fields,
+                            fieldsIndex;
+                        
+                        _this.fields = _this.fields.filter(function(f) {
+                            if (fields.indexOf(f) === -1) {
+                                return false;
+                            }
+                            
+                            return true;
+                        });
+                        
+                        $rootScope.$apply();
+                    }, 500);
+                });
+                
+                return fields;
+            }
+            
+            return null;
+        }
+        
         this.field = '';
-        this.fields = [
+        this.mandatoryFields = [
+            'name'
+        ];
+        
+        this.fields = fromUrl() || [
             'name',
             'extras_conttype_en_txtm',
             'extras_title_en_txts',
@@ -290,9 +341,6 @@ if (!String.prototype.trim) {
             'extras_pkuniqueidcode_bi_strs',
             'extras_zckstatus_bi_txtm'   
         ]
-        this.mandatoryFields = [
-            'name'
-        ];
         
         this.getVisible = function() {
             return this.fields.length !== 0;
@@ -323,7 +371,7 @@ if (!String.prototype.trim) {
         }
     });
 
-})(window, window.angular);
+})(window, window.angular,  window.wb);
 (function(window, angular){'use strict';
     var app = angular.module('fields', []);
     
@@ -373,12 +421,31 @@ if (!String.prototype.trim) {
         });
     }]);
 })(window, window.angular);
-(function(window, angular){'use strict';
+(function(window, angular, wb){'use strict';
     var app = angular.module('organizations', ['checklist-model']);
     
     app.controller('OrganizationsController', ['$http', '$rootScope', function($http, $rootScope) {
         var orgRequest = 'http://ndmckanq1.stcpaz.statcan.gc.ca/zj/api/3/action/organization_list?callback=JSON_CALLBACK',
             _this = this;
+            
+        function fromURL() {
+            var organizations = wb.pageUrlParts.params['fq'],
+                orgs = [];
+            
+            if (organizations) {
+                organizations.split(',').forEach(function(o) {
+                    if (_this.organizations.indexOf(o) !== -1) {
+                        orgs.push(o);
+                    }
+                });
+                
+                if (orgs.length > 0) {
+                    return orgs;
+                }
+            }
+            
+            return null;
+        }
         
         this.changed = function() {
             $rootScope.$emit('organization.selected', this.selectedOrganizations);
@@ -387,7 +454,7 @@ if (!String.prototype.trim) {
         $http.jsonp(orgRequest)
             .then(function(data) {
                 _this.organizations = data.data.result;
-                _this.selectedOrganizations = [
+                _this.selectedOrganizations = fromURL() || [
                     'maformat',
                     'maimdb',
                     'maprimary'
@@ -404,4 +471,4 @@ if (!String.prototype.trim) {
             controllerAs: 'orgCtrl'
         }
     });
-})(window, window.angular);
+})(window, window.angular, window.wb);
