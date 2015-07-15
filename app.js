@@ -76,8 +76,8 @@
             
             $http.jsonp(url, {params: params})
                 .then(function(data){
-                    $rootScope.debug = data;
                     $rootScope.queryResults = data.data.response;
+                    $rootScope.downloadLink = data.config.url + '?' + $.param($.extend({}, data.config.params, {wt: 'csv'}));
                     
                     var fields = data.data.responseHeader.params.fl.split(','),
                         datatable = {
