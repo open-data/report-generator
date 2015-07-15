@@ -61,6 +61,15 @@
     }
     
     app.run(['$http', '$rootScope', function($http, $rootScope) {
+        function maxResultsFromUrl() {
+            var maxResults = wb.pageUrlParts.params['rows'];
+            
+            if ($rootScope.maxResultsOptions[maxResults]) {
+                return maxResults;
+            }
+        }
+    
+        $rootScope.query = wb.pageUrlParts.params['q'] || '';
         $rootScope.maxResultsOptions = {
             20: 20, 
             50: 50, 
@@ -68,7 +77,7 @@
             1000: '1000 (default)', 
             2000: 2000
         };
-        $rootScope.maxResults = '1000';
+        $rootScope.maxResults = maxResultsFromUrl() || '1000';
         
         $rootScope.sendQuery = function() {
             var url = 'http://ndmckanq1.stcpaz.statcan.gc.ca/so04/select',

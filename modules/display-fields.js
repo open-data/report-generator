@@ -1,9 +1,51 @@
-(function(window, angular){'use strict';
+(function(window, angular, wb){'use strict';
     var app = angular.module('display-fields', ['fields']);
     
-    app.controller('DisplayFieldsController',['$rootScope', function($rootScope) {
+    app.controller('DisplayFieldsController',['$rootScope', '$scope', function($rootScope, $scope) {
+        var _this = this;
+        
+        function fromUrl() {
+            var displayFields = wb.pageUrlParts.params['fl'],
+                fields
+                
+            if (displayFields) {
+                fields = [].concat(_this.mandatoryFields);
+                displayFields.split(',').forEach(function(field) {
+                    if (fields.indexOf(field) === -1) {
+                        fields.push(field);
+                    }
+                });
+                
+                //Remove fields that are not reckognized;
+                $rootScope.$on('organization.selected', function(event) {
+                    setTimeout(function() {
+                        var fields = $("#displayfield").scope().fieldsCtrl.fields,
+                            fieldsIndex;
+                        
+                        _this.fields = _this.fields.filter(function(f) {
+                            if (fields.indexOf(f) === -1) {
+                                return false;
+                            }
+                            
+                            return true;
+                        });
+                        
+                        $rootScope.$apply();
+                    }, 500);
+                });
+                
+                return fields;
+            }
+            
+            return null;
+        }
+        
         this.field = '';
-        this.fields = [
+        this.mandatoryFields = [
+            'name'
+        ];
+        
+        this.fields = fromUrl() || [
             'name',
             'extras_conttype_en_txtm',
             'extras_title_en_txts',
@@ -11,9 +53,6 @@
             'extras_pkuniqueidcode_bi_strs',
             'extras_zckstatus_bi_txtm'   
         ]
-        this.mandatoryFields = [
-            'name'
-        ];
         
         this.getVisible = function() {
             return this.fields.length !== 0;
@@ -44,4 +83,4 @@
         }
     });
 
-})(window, window.angular);
+})(window, window.angular,  window.wb);

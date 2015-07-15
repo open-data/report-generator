@@ -19,7 +19,7 @@
                     actualOperator = " " + (this.emptyKey ? 'AND' : this.operator) + " ";
                 }
                 
-                $rootScope.query = ($rootScope.query || '') + actualOperator + expr;
+                $rootScope.query += actualOperator + expr;
                 
                 this.keyword = '';
                 this.field = '';
