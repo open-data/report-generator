@@ -82,7 +82,9 @@
                     var fields = data.data.responseHeader.params.fl.split(','),
                         datatable = {
                             data: sanitizeData($rootScope.queryResults.docs, fields),
-                            columns: createFieldsMapping(fields)
+                            columns: createFieldsMapping(fields),
+                            pageLength: 100,
+                            lengthMenu: [[50, 100, 200, 500, -1], [50, 100, 200, 500, "All"]]
                         };
                         
                     $resultsTable
