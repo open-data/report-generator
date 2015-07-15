@@ -112,22 +112,22 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
                 <input type="text" class="form-control" style="width:100%;" id="query" ng-model="query" name="keyword"/>
             </div>
         </div>
-        
+
         <details>
             <summary class="h5">Advanced Search Options</summary>
             <advanced-search></advanced-search>
         </details>
-        
+
         <details>
             <summary class="h5">Display Options</summary>
-            
+
             <div class="form-group">
                 <label for="format" class="control-label">Maximum number of records:</label>
                 <select id="format" class="form-control" ng-model="maxResults" ng-options="key as value for (key , value) in maxResultsOptions"></select>
             </div>
             <display-fields></display-fields>
         </details>
-         
+
     </section>
     <div class="form-group">
         <input type="submit" class="btn btn-primary h5" value="Generate" />

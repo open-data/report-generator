@@ -1,20 +1,20 @@
 module.exports = function (grunt) {
     // load all grunt tasks matching the ['grunt-*', '@*/grunt-*'] patterns
     require('load-grunt-tasks')(grunt);
-    
+
     function processAppHtml(content) {
         //Remove modules since concatenated in app.js
         content = content.replace(/<\!-- Modules -->(?:.*\s*)*?<\!-- Modules -->/, '');
-        
+
         //Added the templates inline
         content = content.replace('<!-- Insert: Templates -->', inlineTemplates());
-        
+
         //Use the minified app
         content = content.replace(/"app.js"/, '"app.min.js"');
-        
+
         return content;
     }
-    
+
     function inlineTemplates() {
         var templates = '';
 
@@ -40,7 +40,7 @@ module.exports = function (grunt) {
                 dest: 'dist/lib',
                 expand: true
             },
-            
+
             app: {
                 src: 'index.html',
                 dest: 'dist',
@@ -50,7 +50,7 @@ module.exports = function (grunt) {
                 }
             }
         },
-        
+
         concat: {
             js: {
                 src: [
@@ -61,7 +61,7 @@ module.exports = function (grunt) {
                 dest: 'dist/app.js'
             }
         },
-        
+
         uglify: {
             app: {
                 cwd: 'dist',
@@ -71,7 +71,7 @@ module.exports = function (grunt) {
                 expand: true
             }
         },
-        
+
         'gh-pages': {
 			options: {
 				base: "dist"
@@ -79,7 +79,7 @@ module.exports = function (grunt) {
 			src: "**/*.*"
         }
     });
-    
+
     grunt.registerTask('default', ['clean', 'copy', 'concat', 'uglify']);
     grunt.registerTask('deploy', ['default', 'gh-pages']);
 }

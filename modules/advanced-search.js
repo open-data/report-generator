@@ -1,32 +1,32 @@
 (function(window, angular){'use strict';
     var app = angular.module('advanced-search', ['fields']);
-    
+
     app.controller('AdvancedSearchController', ['$rootScope', function($rootScope) {
         this.emptyKey = false;
         this.operator = 'AND'
         this.keyword = ''
-        
+
         this.addField = function() {
             var actualOperator = '',
                 expr;
-            
+
             if (this.field && (this.keyword || this.emptyKey) ) {
-                expr = this.emptyKey ? 
-                    '-' + this.field + ":" + '["" TO *]' : 
+                expr = this.emptyKey ?
+                    '-' + this.field + ":" + '["" TO *]' :
                     this.field +':(*' + this.keyword + '*)';
-                
+
                 if ($rootScope.query && $rootScope.query.trim() !== '') {
                     actualOperator = " " + (this.emptyKey ? 'AND' : this.operator) + " ";
                 }
-                
+
                 $rootScope.query += actualOperator + expr;
-                
+
                 this.keyword = '';
                 this.field = '';
             }
         };
     }]);
-    
+
     app.directive('advancedSearch', function() {
         return {
             restrict: 'E',
@@ -47,6 +47,6 @@ if (!String.prototype.trim) {
       return this.replace(rtrim, '');
     };
   })();
-}    
+}
 
 })(window, window.angular);
