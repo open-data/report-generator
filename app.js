@@ -61,6 +61,15 @@
     }
     
     app.run(['$http', '$rootScope', function($http, $rootScope) {
+        $rootScope.maxResultsOptions = {
+            20: 20, 
+            50: 50, 
+            100: 100, 
+            1000: '1000 (default)', 
+            2000: 2000
+        };
+        $rootScope.maxResults = '1000';
+        
         $rootScope.sendQuery = function() {
             var url = 'http://ndmckanq1.stcpaz.statcan.gc.ca/so04/select',
                 params = {
@@ -70,8 +79,7 @@
                     fq: 'zckownerorg_bi_strs:' + createOrganizationList($rootScope.orgCtrl.selectedOrganizations),
                     q: createQuery($rootScope.query),
                     fl: createFieldsList($rootScope.dspFieldCtrl.fields),
-                    rows: 1000
-                    
+                    rows: parseInt($rootScope.maxResults, 10)
                 };
             
             $http.jsonp(url, {params: params})

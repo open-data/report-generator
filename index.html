@@ -123,13 +123,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
             
             <div class="form-group">
                 <label for="format" class="control-label">Maximum number of records:</label>
-                <select id="format" class="form-control">
-                    <option value="20">20</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                    <option value="1000" selected>1000 (default)</option>
-                    <option value="2000">2000</option>
-                </select>
+                <select id="format" class="form-control" ng-model="maxResults" ng-options="key as value for (key , value) in maxResultsOptions"></select>
             </div>
             <display-fields></display-fields>
         </details>
