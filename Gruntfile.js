@@ -1,15 +1,15 @@
-module.exports = function (grunt) {
-    // load all grunt tasks matching the ['grunt-*', '@*/grunt-*'] patterns
+module.exports = function(grunt) {
+    // Load all grunt tasks matching the ['grunt-*', '@*/grunt-*'] patterns
     require('load-grunt-tasks')(grunt);
 
     function processAppHtml(content) {
-        //Remove modules since concatenated in app.js
+        // Remove modules since concatenated in app.js
         content = content.replace(/<\!-- Modules -->(?:.*\s*)*?<\!-- Modules -->/, '');
 
-        //Added the templates inline
+        // Added the templates inline
         content = content.replace('<!-- Insert: Templates -->', inlineTemplates());
 
-        //Use the minified app
+        // Use the minified app
         content = content.replace(/"app.js"/, '"app.min.js"');
 
         return content;
@@ -19,7 +19,7 @@ module.exports = function (grunt) {
         var templates = '';
 
         grunt.file.expand('templates/**/*.html').forEach(function(path) {
-            templates += '<script type="text/ng-template" id="' + path + '">\n' + grunt.file.read(path) + '</script>\n'
+            templates += '<script type="text/ng-template" id="' + path + '">\n' + grunt.file.read(path) + '</script>\n';
         });
 
         return templates;
@@ -62,6 +62,32 @@ module.exports = function (grunt) {
             }
         },
 
+        'gh-pages': {
+            options: {
+                base: 'dist'
+            },
+            src: '**/*.*'
+        },
+
+        jscs: {
+            options: {
+                config: '.jscsrc'
+            },
+            src: '<%= jshint.all.src %>'
+        },
+
+        jshint: {
+            options: {
+                reporter: require('jshint-stylish')
+            },
+            all: {
+                src: [
+                    '*.js',
+                    'modules/**/*.js'
+                ]
+            }
+        },
+
         uglify: {
             app: {
                 cwd: 'dist',
@@ -70,16 +96,10 @@ module.exports = function (grunt) {
                 ext: '.min.js',
                 expand: true
             }
-        },
-
-        'gh-pages': {
-			options: {
-				base: "dist"
-			},
-			src: "**/*.*"
         }
     });
 
-    grunt.registerTask('default', ['clean', 'copy', 'concat', 'uglify']);
+    grunt.registerTask('test', ['jshint', 'jscs']);
+    grunt.registerTask('default', ['clean', 'test', 'copy', 'concat', 'uglify']);
     grunt.registerTask('deploy', ['default', 'gh-pages']);
-}
+};

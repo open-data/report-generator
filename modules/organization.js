@@ -1,4 +1,4 @@
-(function(window, angular, wb){'use strict';
+(function(window, angular, wb) {'use strict';
     var app = angular.module('organizations', ['checklist-model']);
 
     app.controller('OrganizationsController', ['$http', '$rootScope', function($http, $rootScope) {
@@ -6,7 +6,7 @@
             _this = this;
 
         function fromURL() {
-            var organizations = wb.pageUrlParts.params['fq'],
+            var organizations = wb.pageUrlParts.params.fq,
                 orgs = [];
 
             if (organizations) {
@@ -26,7 +26,7 @@
 
         this.changed = function() {
             $rootScope.$emit('organization.selected', this.selectedOrganizations);
-        }
+        };
 
         $http.jsonp(orgRequest)
             .then(function(data) {
@@ -40,12 +40,12 @@
             });
     }]);
 
-     app.directive('organizations', function() {
+    app.directive('organizations', function() {
         return {
             restrict: 'E',
             templateUrl: 'templates/organizations.html',
             controller: 'OrganizationsController',
             controllerAs: 'orgCtrl'
-        }
+        };
     });
-})(window, window.angular, window.wb);
+})(window, angular, wb);
