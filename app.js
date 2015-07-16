@@ -33,8 +33,8 @@
                 row[field] = cell || '';
 
                 if (field === 'name') {
-                    row[field] = '<a target="_blank" href="http://ndmckanq1.stcpaz.statcan.gc.ca/zj/dataset/' + cell + '">' + cell + '</a><br>' +
-                        '<a target="_blank" href="http://ndmckanq1.stcpaz.statcan.gc.ca/zj/dataset/edit/' + cell + '#field-extras-1-key" class="btn btn-default">' +
+                    row[field] = '<a target="_blank" href="' + $rootScope.ckanInstance + '/zj/dataset/' + cell + '">' + cell + '</a><br>' +
+                        '<a target="_blank" href="' + $rootScope.ckanInstance + 'zj/dataset/edit/' + cell + '#field-extras-1-key" class="btn btn-default">' +
                             '<span class="glyphicon glyphicon-pencil"><span class="wb-inv">Edit ' + cell + '</span></a>';
                 } else if (typeof cell === 'object') {
                     row[field] = cell.join(',');
@@ -68,6 +68,7 @@
             }
         }
 
+        $rootScope.ckanInstance = 'http://ndmckanq1.stcpaz.statcan.gc.ca';
         $rootScope.query = wb.pageUrlParts.params.q || '';
         $rootScope.maxResultsOptions = {
             20: 20,
@@ -79,7 +80,7 @@
         $rootScope.maxResults = maxResultsFromUrl() || '1000';
 
         $rootScope.sendQuery = function() {
-            var url = 'http://ndmckanq1.stcpaz.statcan.gc.ca/so04/select',
+            var url = $rootScope.ckanInstance + '/so04/select',
                 params = {
                     wt: 'json',
                     'json.wrf': 'JSON_CALLBACK',
