@@ -1,4 +1,4 @@
-(function(window, angular){'use strict';
+(function(window, angular) {'use strict';
     var app = angular.module('fields', []);
 
     app.controller('FieldsController', ['$http', '$q', '$rootScope', function($http, $q, $rootScope) {
@@ -9,7 +9,7 @@
 
         $rootScope.$on('organization.selected', function(event, selectedOrganizations) {
             var fieldsRequest = 'http://ndmckanq1.stcpaz.statcan.gc.ca/so04/select?q=*&rows=1&fl=extras_*,name&wt=json&json.wrf=JSON_CALLBACK&fq=extras_zckownerorg_bi_strs:',
-                fieldsCallback = function(data){
+                fieldsCallback = function(data) {
                     var fq = data.responseHeader.params.fq,
                         org = fq.substr(fq.indexOf(':') + 1);
 
@@ -36,7 +36,7 @@
                 .then(function() {
                     _this.fields = [];
 
-                    newFields.forEach(function(val, index, array){
+                    newFields.forEach(function(val, index, array) {
                         if (_this.fields.indexOf(val) === -1) {
                             _this.fields.push(val);
                         }
@@ -46,4 +46,4 @@
                 });
         });
     }]);
-})(window, window.angular);
+})(window, angular);

@@ -1,7 +1,6 @@
-(function(window, angular, wb, $){'use strict';
-    var app = angular.module('reportGenerator', ['organizations', 'advanced-search', 'display-fields']);
-
-    var $resultsTable = $('#results');
+(function(window, angular, wb, $) {'use strict';
+    var app = angular.module('reportGenerator', ['organizations', 'advanced-search', 'display-fields']),
+        $resultsTable = $('#results');
 
     function createOrganizationList(orgs) {
         return orgs.join(' OR ');
@@ -24,19 +23,19 @@
     function sanitizeData(rows, fields) {
         var row, r, field, f, cell;
 
-        for(r = 0; r < rows.length; r += 1) {
+        for (r = 0; r < rows.length; r += 1) {
             row = rows[r];
 
-            for (f = 0; f < fields.length; f+= 1) {
+            for (f = 0; f < fields.length; f += 1) {
                 field = fields[f];
                 cell = row[field];
 
                 row[field] = cell || '';
 
-                if( field === 'name') {
+                if (field === 'name') {
                     row[field] = '<a target="_blank" href="http://ndmckanq1.stcpaz.statcan.gc.ca/zj/dataset/' + cell + '">' + cell + '</a><br>' +
-                        '<a target="_blank" href="http://ndmckanq1.stcpaz.statcan.gc.ca/zj/dataset/edit/' + cell +'#field-extras-1-key" class="btn btn-default">' +
-                            '<span class="glyphicon glyphicon-pencil"><span class="wb-inv">Edit ' + cell + '</span></a>'
+                        '<a target="_blank" href="http://ndmckanq1.stcpaz.statcan.gc.ca/zj/dataset/edit/' + cell + '#field-extras-1-key" class="btn btn-default">' +
+                            '<span class="glyphicon glyphicon-pencil"><span class="wb-inv">Edit ' + cell + '</span></a>';
                 } else if (typeof cell === 'object') {
                     row[field] = cell.join(',');
                 }
@@ -44,13 +43,13 @@
         }
 
         return rows;
-    };
+    }
 
     function createFieldsMapping(fields) {
         var fieldsMapping = [],
             f;
 
-        for(f = 0; f < fields.length; f += 1) {
+        for (f = 0; f < fields.length; f += 1) {
             fieldsMapping.push({
                 data: fields[f],
                 title: fields[f],
@@ -62,14 +61,14 @@
 
     app.run(['$http', '$rootScope', function($http, $rootScope) {
         function maxResultsFromUrl() {
-            var maxResults = wb.pageUrlParts.params['rows'];
+            var maxResults = wb.pageUrlParts.params.rows;
 
             if ($rootScope.maxResultsOptions[maxResults]) {
                 return maxResults;
             }
         }
 
-        $rootScope.query = wb.pageUrlParts.params['q'] || '';
+        $rootScope.query = wb.pageUrlParts.params.q || '';
         $rootScope.maxResultsOptions = {
             20: 20,
             50: 50,
@@ -82,7 +81,7 @@
         $rootScope.sendQuery = function() {
             var url = 'http://ndmckanq1.stcpaz.statcan.gc.ca/so04/select',
                 params = {
-                    'wt': 'json',
+                    wt: 'json',
                     'json.wrf': 'JSON_CALLBACK',
                     otherparams: '',
                     fq: 'zckownerorg_bi_strs:' + createOrganizationList($rootScope.orgCtrl.selectedOrganizations),
@@ -92,7 +91,7 @@
                 };
 
             $http.jsonp(url, {params: params})
-                .then(function(data){
+                .then(function(data) {
                     $rootScope.queryResults = data.data.response;
                     $rootScope.downloadLink = data.config.url + '?' + $.param($.extend({}, data.config.params, {wt: 'csv'}));
 
@@ -101,7 +100,7 @@
                             data: sanitizeData($rootScope.queryResults.docs, fields),
                             columns: createFieldsMapping(fields),
                             pageLength: 100,
-                            lengthMenu: [[50, 100, 200, 500, -1], [50, 100, 200, 500, "All"]]
+                            lengthMenu: [[50, 100, 200, 500, -1], [50, 100, 200, 500, 'All']]
                         };
 
                     $resultsTable
@@ -112,8 +111,8 @@
                         .removeClass('wb-tables-inited wb-init')
                         .attr('data-wb-tables', JSON.stringify(datatable))
                         .trigger('wb-init.wb-tables');
-                })
-        }
+                });
+        };
     }]);
 
-})(window, window.angular, window.wb, jQuery);
+})(window, angular, wb, jQuery);
