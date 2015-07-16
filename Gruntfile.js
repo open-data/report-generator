@@ -62,6 +62,16 @@ module.exports = function(grunt) {
             }
         },
 
+        connect: {
+            server: {
+                options: {
+                    port: 8000,
+                    base: '.',
+                    keepalive: true
+                }
+            }
+        },
+
         'gh-pages': {
             options: {
                 base: 'dist'
@@ -102,4 +112,5 @@ module.exports = function(grunt) {
     grunt.registerTask('test', ['jshint', 'jscs']);
     grunt.registerTask('default', ['clean', 'test', 'copy', 'concat', 'uglify']);
     grunt.registerTask('deploy', ['default', 'gh-pages']);
+    grunt.registerTask('server', ['connect']);
 };
