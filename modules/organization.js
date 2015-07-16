@@ -2,7 +2,7 @@
     var app = angular.module('organizations', ['checklist-model']);
 
     app.controller('OrganizationsController', ['$http', '$rootScope', function($http, $rootScope) {
-        var orgRequest = 'http://ndmckanq1.stcpaz.statcan.gc.ca/zj/api/3/action/organization_list?callback=JSON_CALLBACK',
+        var orgRequest = $rootScope.ckanInstance + '/zj/api/3/action/organization_list?callback=JSON_CALLBACK',
             _this = this;
 
         function fromURL() {
