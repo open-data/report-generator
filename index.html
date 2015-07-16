@@ -131,8 +131,13 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
     </section>
     <div class="form-group">
         <input type="submit" class="btn btn-primary h5" value="Generate" />
+        <button type="button" class="btn btn-default h5" ng-click="saveUrl()">Save Query</button>
     </div>
 </form>
+
+<div ng-show="savedUrl">
+    <a href="{{savedUrl}}"><span class="glyphicon glyphicon-link"></span>Saved Query</a>
+</div>
 
 <div ng-show="queryResults" style="">
     <h2>Results</h2>

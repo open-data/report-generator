@@ -2,64 +2,57 @@
     var app = angular.module('reportGenerator', ['organizations', 'advanced-search', 'display-fields']),
         $resultsTable = $('#results');
 
-    function createOrganizationList(orgs) {
-        return orgs.join(' OR ');
-    }
+    app.run(['$http', '$rootScope', function($http, $rootScope) {
 
-    function createFieldsList(fields) {
-        return fields.join(',');
-    }
+        function createQuery(keywords) {
+            keywords = keywords.replace(/(.*?)((?: (?:OR|AND) )|$)/g, function(match, key, sep) {
+                if (key.length !== 0 && !key.match(/:[\(\[].*?[\)\]]/)) {
+                    key = 'entext:(' + key + ')';
+                }
+                return key + sep;
+            });
+            return keywords;
+        }
 
-    function createQuery(keywords) {
-        keywords = keywords.replace(/(.*?)((?: (?:OR|AND) )|$)/g, function(match, key, sep) {
-            if (key.length !== 0 && !key.match(/:[\(\[].*?[\)\]]/)) {
-                key = 'entext:(' + key + ')';
-            }
-            return key + sep;
-        });
-        return keywords;
-    }
+        function sanitizeData(rows, fields) {
+            var row, r, field, f, cell;
 
-    function sanitizeData(rows, fields) {
-        var row, r, field, f, cell;
+            for (r = 0; r < rows.length; r += 1) {
+                row = rows[r];
 
-        for (r = 0; r < rows.length; r += 1) {
-            row = rows[r];
+                for (f = 0; f < fields.length; f += 1) {
+                    field = fields[f];
+                    cell = row[field];
 
-            for (f = 0; f < fields.length; f += 1) {
-                field = fields[f];
-                cell = row[field];
+                    row[field] = cell || '';
 
-                row[field] = cell || '';
-
-                if (field === 'name') {
-                    row[field] = '<a target="_blank" href="' + $rootScope.ckanInstance + '/zj/dataset/' + cell + '">' + cell + '</a><br>' +
-                        '<a target="_blank" href="' + $rootScope.ckanInstance + 'zj/dataset/edit/' + cell + '#field-extras-1-key" class="btn btn-default">' +
-                            '<span class="glyphicon glyphicon-pencil"><span class="wb-inv">Edit ' + cell + '</span></a>';
-                } else if (typeof cell === 'object') {
-                    row[field] = cell.join(',');
+                    if (field === 'name') {
+                        row[field] = '<a target="_blank" href="' + $rootScope.ckanInstance + '/zj/dataset/' + cell + '">' + cell + '</a><br>' +
+                            '<a target="_blank" href="' + $rootScope.ckanInstance + 'zj/dataset/edit/' + cell + '#field-extras-1-key" class="btn btn-default">' +
+                                '<span class="glyphicon glyphicon-pencil"><span class="wb-inv">Edit ' + cell + '</span></a>';
+                    } else if (typeof cell === 'object') {
+                        row[field] = cell.join(',');
+                    }
                 }
             }
+
+            return rows;
         }
 
-        return rows;
-    }
+        function createFieldsMapping(fields) {
+            var fieldsMapping = [],
+                f;
 
-    function createFieldsMapping(fields) {
-        var fieldsMapping = [],
-            f;
+            for (f = 0; f < fields.length; f += 1) {
+                fieldsMapping.push({
+                    data: fields[f],
+                    title: fields[f],
+                });
+            }
 
-        for (f = 0; f < fields.length; f += 1) {
-            fieldsMapping.push({
-                data: fields[f],
-                title: fields[f],
-            });
+            return fieldsMapping;
         }
 
-        return fieldsMapping;
-    }
-
-    app.run(['$http', '$rootScope', function($http, $rootScope) {
         function maxResultsFromUrl() {
             var maxResults = wb.pageUrlParts.params.rows;
 
@@ -79,15 +72,26 @@
         };
         $rootScope.maxResults = maxResultsFromUrl() || '1000';
 
+        $rootScope.saveUrl = function() {
+            var urlParts = wb.pageUrlParts,
+                url = urlParts.absolute.replace(urlParts.search, '').replace(urlParts.hash, '');
+
+            $rootScope.savedUrl = url +
+                '?fq=' + $rootScope.orgCtrl.selectedOrganizations.join(',') +
+                '&q=' + $rootScope.query +
+                '&fl=;' + $rootScope.dspFieldCtrl.fields.join(',') +
+                '&rows=' + $rootScope.maxResults;
+        };
+
         $rootScope.sendQuery = function() {
             var url = $rootScope.ckanInstance + '/so04/select',
                 params = {
                     wt: 'json',
                     'json.wrf': 'JSON_CALLBACK',
                     otherparams: '',
-                    fq: 'zckownerorg_bi_strs:' + createOrganizationList($rootScope.orgCtrl.selectedOrganizations),
+                    fq: 'zckownerorg_bi_strs:' + $rootScope.orgCtrl.selectedOrganizations.join(' OR '),
                     q: createQuery($rootScope.query),
-                    fl: createFieldsList($rootScope.dspFieldCtrl.fields),
+                    fl: $rootScope.dspFieldCtrl.fields.join(','),
                     rows: parseInt($rootScope.maxResults, 10)
                 };
 
