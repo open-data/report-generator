@@ -17,6 +17,7 @@
   "dependencies": {
     "wet-boew": "wet-boew/wet-boew-cdn#v4.0-dist",
     "theme-gc-intranet": "wet-boew/themes-cdn#theme-gc-intranet",
-    "angular": "~1.4.2"
+    "angular": "~1.4.2",
+    "checklist-model": "~0.2.4"
   }
 }
