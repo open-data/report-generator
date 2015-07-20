@@ -62,7 +62,7 @@
         }
 
         $rootScope.ckanInstance = 'http://ndmckanq1.stcpaz.statcan.gc.ca';
-        $rootScope.query = wb.pageUrlParts.params.q || '';
+        $rootScope.query = decodeURI(wb.pageUrlParts.params.q) || '';
         $rootScope.maxResultsOptions = {
             20: 20,
             50: 50,
@@ -299,7 +299,7 @@ angular.module('checklist-model', [])
         var _this = this;
 
         function fromUrl() {
-            var displayFields = wb.pageUrlParts.params.fl,
+            var displayFields = decodeURI(wb.pageUrlParts.params.fl),
                 fields;
 
             if (displayFields) {
@@ -437,7 +437,7 @@ angular.module('checklist-model', [])
             _this = this;
 
         function fromURL() {
-            var organizations = wb.pageUrlParts.params.fq,
+            var organizations = decodeURI(wb.pageUrlParts.params.fq),
                 orgs = [];
 
             if (organizations) {
