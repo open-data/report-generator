@@ -97,6 +97,7 @@
 
             $http.jsonp(url, {params: params})
                 .then(function(data) {
+                    $rootScope.queryResultsCount = data.data.response.numFound;
                     $rootScope.queryResults = data.data.response;
                     $rootScope.downloadLink = data.config.url + '?' + $.param($.extend({}, data.config.params, {wt: 'csv'}));
 
