@@ -5,7 +5,7 @@
         var _this = this;
 
         function fromUrl() {
-            var displayFields = wb.pageUrlParts.params.fl,
+            var displayFields = decodeURI(wb.pageUrlParts.params.fl),
                 fields;
 
             if (displayFields) {

@@ -6,7 +6,7 @@
             _this = this;
 
         function fromURL() {
-            var organizations = wb.pageUrlParts.params.fq,
+            var organizations = decodeURI(wb.pageUrlParts.params.fq),
                 orgs = [];
 
             if (organizations) {

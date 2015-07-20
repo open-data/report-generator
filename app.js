@@ -62,7 +62,7 @@
         }
 
         $rootScope.ckanInstance = 'http://ndmckanq1.stcpaz.statcan.gc.ca';
-        $rootScope.query = wb.pageUrlParts.params.q || '';
+        $rootScope.query = decodeURI(wb.pageUrlParts.params.q) || '';
         $rootScope.maxResultsOptions = {
             20: 20,
             50: 50,
