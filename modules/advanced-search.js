@@ -22,7 +22,6 @@
                 $rootScope.query += actualOperator + expr;
 
                 this.keyword = '';
-                this.field = '';
             }
         };
     }]);
