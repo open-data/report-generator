@@ -5,12 +5,13 @@
         var _this = this;
 
         function fromUrl() {
-            var displayFields = decodeURI(wb.pageUrlParts.params.fl),
+            var displayFields = wb.pageUrlParts.params.fl,
                 fields;
 
             if (displayFields) {
+
                 fields = [].concat(_this.mandatoryFields);
-                displayFields.split(',').forEach(function(field) {
+                decodeURI(displayFields).split(',').forEach(function(field) {
                     if (fields.indexOf(field) === -1) {
                         fields.push(field);
                     }

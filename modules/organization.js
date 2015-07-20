@@ -6,11 +6,11 @@
             _this = this;
 
         function fromURL() {
-            var organizations = decodeURI(wb.pageUrlParts.params.fq),
+            var organizations = wb.pageUrlParts.params.fq,
                 orgs = [];
 
             if (organizations) {
-                organizations.split(',').forEach(function(o) {
+                decodeURI(organizations.split(',')).forEach(function(o) {
                     if (_this.organizations.indexOf(o) !== -1) {
                         orgs.push(o);
                     }
