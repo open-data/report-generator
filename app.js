@@ -28,7 +28,7 @@
 
                     if (field === 'name') {
                         row[field] = '<a target="_blank" href="' + $rootScope.ckanInstance + '/zj/dataset/' + cell + '">' + cell + '</a><br>' +
-                            '<a target="_blank" href="' + $rootScope.ckanInstance + 'zj/dataset/edit/' + cell + '#field-extras-1-key" class="btn btn-default">' +
+                            '<a target="_blank" href="' + $rootScope.ckanInstance + '/zj/dataset/edit/' + cell + '#field-extras-1-key" class="btn btn-default">' +
                                 '<span class="glyphicon glyphicon-pencil"><span class="wb-inv">Edit ' + cell + '</span></a>';
                     } else if (typeof cell === 'object') {
                         row[field] = cell.join(',');
@@ -263,7 +263,6 @@ angular.module('checklist-model', [])
                 $rootScope.query += actualOperator + expr;
 
                 this.keyword = '';
-                this.field = '';
             }
         };
     }]);
