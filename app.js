@@ -66,7 +66,7 @@
         }
 
         $rootScope.ckanInstance = 'http://ndmckanq1.stcpaz.statcan.gc.ca';
-        $rootScope.query = decodeURI(wb.pageUrlParts.params.q) || '';
+        $rootScope.query = wb.pageUrlParts.params.q ? decodeURI(wb.pageUrlParts.params.q) : '';
         $rootScope.maxResultsOptions = {
             20: 20,
             50: 50,
@@ -303,12 +303,13 @@ angular.module('checklist-model', [])
         var _this = this;
 
         function fromUrl() {
-            var displayFields = decodeURI(wb.pageUrlParts.params.fl),
+            var displayFields = wb.pageUrlParts.params.fl,
                 fields;
 
             if (displayFields) {
+
                 fields = [].concat(_this.mandatoryFields);
-                displayFields.split(',').forEach(function(field) {
+                decodeURI(displayFields).split(',').forEach(function(field) {
                     if (fields.indexOf(field) === -1) {
                         fields.push(field);
                     }
@@ -441,11 +442,11 @@ angular.module('checklist-model', [])
             _this = this;
 
         function fromURL() {
-            var organizations = decodeURI(wb.pageUrlParts.params.fq),
+            var organizations = wb.pageUrlParts.params.fq,
                 orgs = [];
 
             if (organizations) {
-                organizations.split(',').forEach(function(o) {
+                decodeURI(organizations.split(',')).forEach(function(o) {
                     if (_this.organizations.indexOf(o) !== -1) {
                         orgs.push(o);
                     }
