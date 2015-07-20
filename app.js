@@ -5,6 +5,10 @@
     app.run(['$http', '$rootScope', function($http, $rootScope) {
 
         function createQuery(keywords) {
+            if (keywords.length === 0) {
+                return '*';
+            }
+
             keywords = keywords.replace(/(.*?)((?: (?:OR|AND) )|$)/g, function(match, key, sep) {
                 if (key.length !== 0 && !key.match(/:[\(\[].*?[\)\]]/)) {
                     key = 'entext:(' + key + ')';
