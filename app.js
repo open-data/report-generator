@@ -5,11 +5,15 @@
     app.run(['$http', '$rootScope', function($http, $rootScope) {
 
         function createQuery(keywords) {
+            var regexp = /(.*?)(?:(?: (?:OR|AND) )|$)/g;
+
             if (keywords.length === 0) {
                 return '*';
             }
 
-            keywords = keywords.replace(/(.*?)((?: (?:OR|AND) )|$)/g, function(match, key, sep) {
+            console.log(keywords.match(regexp));
+
+            keywords = keywords.replace(regexp, function(match, key, sep) {
                 if (key.length !== 0 && !key.match(/:[\(\[].*?[\)\]]/)) {
                     key = 'entext:(' + key + ')';
                 }
@@ -83,7 +87,7 @@
             $rootScope.savedUrl = url +
                 '?fq=' + $rootScope.orgCtrl.selectedOrganizations.join(',') +
                 '&q=' + $rootScope.query +
-                '&fl=;' + $rootScope.dspFieldCtrl.fields.join(',') +
+                '&fl=' + $rootScope.dspFieldCtrl.fields.join(',') +
                 '&rows=' + $rootScope.maxResults;
         };
 

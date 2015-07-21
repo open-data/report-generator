@@ -10,7 +10,7 @@
                 orgs = [];
 
             if (organizations) {
-                decodeURI(organizations.split(',')).forEach(function(o) {
+                decodeURI(organizations).split(',').forEach(function(o) {
                     if (_this.organizations.indexOf(o) !== -1) {
                         orgs.push(o);
                     }
