@@ -5,17 +5,15 @@
     app.run(['$http', '$rootScope', function($http, $rootScope) {
 
         function createQuery(keywords) {
-            var regexp = /(.*?)(?:(?: (?:OR|AND) )|$)/g;
+            var regexp = /(.*?)((?: (?:OR|AND) )|$)/g;
 
             if (keywords.length === 0) {
                 return '*';
             }
 
-            console.log(keywords.match(regexp));
-
             keywords = keywords.replace(regexp, function(match, key, sep) {
                 if (key.length !== 0 && !key.match(/:[\(\[].*?[\)\]]/)) {
-                    key = 'entext:(' + key + ')';
+                    key = '*' + key + '*';
                 }
                 return key + sep;
             });
