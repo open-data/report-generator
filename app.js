@@ -13,7 +13,7 @@
 
             keywords = keywords.replace(regexp, function(match, key, sep) {
                 if (key.length !== 0 && !key.match(/:[\(\[].*?[\)\]]/)) {
-                    key = '*' + key + '*';
+                    key = 'entext:(' + key + ')';
                 }
                 return key + sep;
             });
