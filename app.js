@@ -68,6 +68,7 @@
         }
 
         $rootScope.ckanInstance = 'http://ndmckanq1.stcpaz.statcan.gc.ca';
+        $rootScope.solrCore =  $rootScope.ckanInstance + '/so04';
         $rootScope.query = wb.pageUrlParts.params.q ? decodeURI(wb.pageUrlParts.params.q) : '';
         $rootScope.maxResultsOptions = {
             20: 20,
@@ -90,7 +91,7 @@
         };
 
         $rootScope.sendQuery = function() {
-            var url = $rootScope.ckanInstance + '/so04/select',
+            var url = $rootScope.solrCore + '/select',
                 params = {
                     wt: 'json',
                     'json.wrf': 'JSON_CALLBACK',
