@@ -13,7 +13,7 @@
 
             keywords = keywords.replace(regexp, function(match, key, sep) {
                 if (key.length !== 0 && !key.match(/:[\(\[].*?[\)\]]/)) {
-                    key = '*' + key + '*';
+                    key = 'entext:(' + key + ')';
                 }
                 return key + sep;
             });
@@ -67,7 +67,8 @@
             }
         }
 
-        $rootScope.ckanInstance = 'http://ndmckanq1.stcpaz.statcan.gc.ca';
+        $rootScope.ckanInstance = 'http://ndmckand1';
+        $rootScope.solrCore =  $rootScope.ckanInstance + '/so04/cksoe1';
         $rootScope.query = wb.pageUrlParts.params.q ? decodeURI(wb.pageUrlParts.params.q) : '';
         $rootScope.maxResultsOptions = {
             20: 20,
@@ -90,7 +91,7 @@
         };
 
         $rootScope.sendQuery = function() {
-            var url = $rootScope.ckanInstance + '/so04/select',
+            var url = $rootScope.solrCore + '/select',
                 params = {
                     wt: 'json',
                     'json.wrf': 'JSON_CALLBACK',
@@ -261,7 +262,7 @@ angular.module('checklist-model', [])
             if (this.field && (this.keyword || this.emptyKey)) {
                 expr = this.emptyKey ?
                     '-' + this.field + ':' + '["" TO *]' :
-                    this.field + ':(*' + this.keyword + '*)';
+                    this.field + ':(' + this.keyword + ')';
 
                 if ($rootScope.query && $rootScope.query.trim() !== '') {
                     actualOperator = ' ' + (this.emptyKey ? 'AND' : this.operator) + ' ';
@@ -396,7 +397,7 @@ angular.module('checklist-model', [])
         this.fields = [];
 
         $rootScope.$on('organization.selected', function(event, selectedOrganizations) {
-            var fieldsRequest = $rootScope.ckanInstance + '/so04/select?q=*&rows=1&fl=extras_*,name&wt=json&json.wrf=JSON_CALLBACK&fq=extras_zckownerorg_bi_strs:',
+            var fieldsRequest = $rootScope.solrCore + '/select?q=*&rows=1&fl=extras_*,name&wt=json&json.wrf=JSON_CALLBACK&fq=extras_zckownerorg_bi_strs:',
                 fieldsCallback = function(data) {
                     var fq = data.responseHeader.params.fq,
                         org = fq.substr(fq.indexOf(':') + 1);
