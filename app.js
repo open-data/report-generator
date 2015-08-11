@@ -67,8 +67,8 @@
             }
         }
 
-        $rootScope.ckanInstance = 'http://ndmckand1';
-        $rootScope.solrCore =  $rootScope.ckanInstance + '/so04/cksoe1';
+        $rootScope.ckanInstance = 'http://ndmckanq1.stcpaz.statcan.gc.ca';
+        $rootScope.solrCore =  $rootScope.ckanInstance + '/so04';
         $rootScope.query = wb.pageUrlParts.params.q ? decodeURI(wb.pageUrlParts.params.q) : '';
         $rootScope.maxResultsOptions = {
             20: 20,
