@@ -99,6 +99,9 @@ module.exports = function(grunt) {
         },
 
         uglify: {
+            options: {
+                sourceMap: true
+            },
             app: {
                 cwd: 'dist',
                 src: '*.js',
