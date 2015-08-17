@@ -79,6 +79,10 @@
         };
         $rootScope.maxResults = maxResultsFromUrl() || '1000';
 
+        $rootScope.clearKeywords = function() {
+            $rootScope.query = '';
+        };
+
         $rootScope.saveUrl = function() {
             var urlParts = wb.pageUrlParts,
                 url = urlParts.absolute.replace(urlParts.search, '').replace(urlParts.hash, '');
