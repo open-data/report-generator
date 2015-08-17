@@ -109,7 +109,12 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
         <div class="row">
             <div class="form-group col-xs-12">
                 <label for="query" class="control-label">Keywords</label>
-                <input type="text" class="form-control" style="width:100%;" id="query" ng-model="query" name="keyword"/>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="query" ng-model="query" name="keyword"/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" style="border-style:solid;" ng-click="clearKeywords()"><span class="glyphicon glyphicon-remove-circle"></span><span class="wb-inv">Clear</span></button>
+                        </span>
+                </div>
             </div>
         </div>
 

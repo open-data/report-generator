@@ -79,6 +79,10 @@
         };
         $rootScope.maxResults = maxResultsFromUrl() || '1000';
 
+        $rootScope.clearKeywords = function() {
+            $rootScope.query = '';
+        };
+
         $rootScope.saveUrl = function() {
             var urlParts = wb.pageUrlParts,
                 url = urlParts.absolute.replace(urlParts.search, '').replace(urlParts.hash, '');
@@ -262,7 +266,7 @@ angular.module('checklist-model', [])
             if (this.field && (this.keyword || this.emptyKey)) {
                 expr = this.emptyKey ?
                     '-' + this.field + ':' + '["" TO *]' :
-                    this.field + ':(' + this.keyword + ')';
+                    this.field + ':(*' + this.keyword + '*)';
 
                 if ($rootScope.query && $rootScope.query.trim() !== '') {
                     actualOperator = ' ' + (this.emptyKey ? 'AND' : this.operator) + ' ';
