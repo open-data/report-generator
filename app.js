@@ -33,8 +33,10 @@
                     row[field] = cell || '';
 
                     if (field === 'name') {
-                        row[field] = '<a target="_blank" href="' + $rootScope.ckanInstance + '/zj/dataset/' + cell + '">' + cell + '</a><br>' +
-                            '<a target="_blank" href="' + $rootScope.ckanInstance + '/zj/dataset/edit/' + cell + '#field-extras-1-key" class="btn btn-default">' +
+                        row[field] = '' + cell + ' ' +
+                            '<a target="_blank" href="' + $rootScope.ckanInstance + '/zj/dataset/' + cell + '" class="btn btn-default">' +
+                                '<span class="glyphicon glyphicon-eye-open"><span class="wb-inv">View ' + cell + '</span></a>' +
+                            '<a target="_blank" href="' + $rootScope.ckanInstance + '/zj/dataset/edit/' + cell + '" class="btn btn-default">' +
                                 '<span class="glyphicon glyphicon-pencil"><span class="wb-inv">Edit ' + cell + '</span></a>';
                     } else if (typeof cell === 'object') {
                         row[field] = cell.join(',');
@@ -116,6 +118,12 @@
                         datatable = {
                             data: sanitizeData($rootScope.queryResults.docs, fields),
                             columns: createFieldsMapping(fields),
+                            columnDefs: [
+                                {
+                                    className: 'nowrap right',
+                                    targets: [0]
+                                }
+                            ],
                             pageLength: 100,
                             lengthMenu: [[50, 100, 200, 500, -1], [50, 100, 200, 500, 'All']]
                         };
