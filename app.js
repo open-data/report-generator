@@ -21,7 +21,7 @@
         }
 
         function sanitizeData(rows, fields) {
-            var row, r, field, f, cell;
+            var row, r, field, f, cell, name;
 
             for (r = 0; r < rows.length; r += 1) {
                 row = rows[r];
@@ -33,13 +33,16 @@
                     row[field] = cell || '';
 
                     if (field === 'name') {
-                        row[field] = '' + cell + ' ' +
-                            '<a target="_blank" href="' + $rootScope.ckanInstance + '/zj/dataset/' + cell + '" class="btn btn-default">' +
-                                '<span class="glyphicon glyphicon-eye-open"><span class="wb-inv">View ' + cell + '</span></a>' +
-                            '<a target="_blank" href="' + $rootScope.ckanInstance + '/zj/dataset/edit/' + cell + '" class="btn btn-default">' +
-                                '<span class="glyphicon glyphicon-pencil"><span class="wb-inv">Edit ' + cell + '</span></a>';
-                    } else if (typeof cell === 'object') {
-                        row[field] = cell.join(',');
+                        name = cell;
+                        row[field] = '' + name + ' ' +
+                            '<a target="_blank" href="' + $rootScope.ckanInstance + '/zj/dataset/' + name + '" class="btn btn-default">' +
+                                '<span class="glyphicon glyphicon-eye-open"><span class="wb-inv">View ' + name + '</span></a>' +
+                            '<a target="_blank" href="' + $rootScope.ckanInstance + '/zj/dataset/edit/' + name + '" class="btn btn-default">' +
+                                '<span class="glyphicon glyphicon-pencil"><span class="wb-inv">Edit ' + name + '</span></a>';
+                    } else {
+                        row[field] = (typeof cell === 'object' ? cell.join(',') : cell) +
+                            '<a target="_blank" href="' + $rootScope.ckanInstance + '/zj/dataset/edit/' + name + '#' + field + '" class="btn">' +
+                                '<span class="glyphicon glyphicon-pencil"><span class="wb-inv">Edit field \'' + cell + '\' of dataset \'' + name + '\'</span></a>';
                     }
                 }
             }
