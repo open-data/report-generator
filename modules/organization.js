@@ -1,8 +1,8 @@
 (function(window, angular, wb) {'use strict';
-    var app = angular.module('organizations', ['checklist-model']);
+    var app = angular.module('organizations', ['checklist-model', 'services.config']);
 
-    app.controller('OrganizationsController', ['$http', '$rootScope', function($http, $rootScope) {
-        var orgRequest = $rootScope.ckanInstance + '/zj/api/3/action/organization_list?callback=JSON_CALLBACK',
+    app.controller('OrganizationsController', ['$http', '$rootScope', 'configuration', function($http, $rootScope, configuration) {
+        var orgRequest = configuration.ckanInstance + '/api/3/action/organization_list?callback=JSON_CALLBACK',
             _this = this;
 
         function fromURL() {

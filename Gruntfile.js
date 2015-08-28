@@ -9,8 +9,9 @@ module.exports = function(grunt) {
         // Added the templates inline
         content = content.replace('<!-- Insert: Templates -->', inlineTemplates());
 
-        // Use the minified app
+        // Use the minified app and config
         content = content.replace(/"app.js"/, '"app.min.js"');
+        content = content.replace(/"config\/config.js"/, '"config/config.min.js"');
 
         return content;
     }
@@ -66,7 +67,7 @@ module.exports = function(grunt) {
             server: {
                 options: {
                     port: 8000,
-                    base: '.',
+                    base: 'dist',
                     keepalive: true
                 }
             }
@@ -76,7 +77,15 @@ module.exports = function(grunt) {
             options: {
                 base: 'dist'
             },
-            src: '**/*.*'
+            'gh-pages': {
+                src: '**/*.*'
+            },
+            internal: {
+                options: {
+                    branch: 'gh-pages-internal'
+                },
+                src: '**/*.*'
+            }
         },
 
         jscs: {
@@ -98,13 +107,39 @@ module.exports = function(grunt) {
             }
         },
 
+        replace: {
+            external: {
+                options: {
+                    patterns: [{
+                        json: grunt.file.readJSON('./config/environments/external.json')
+                    }]
+                },
+                src: 'config/config.js',
+                dest: 'dist',
+                expand: true
+            },
+            internal: {
+                options: {
+                    patterns: [{
+                        json: grunt.file.readJSON('./config/environments/internal.json')
+                    }]
+                },
+                src: 'config/config.js',
+                dest: 'dist',
+                expand: true
+            }
+        },
+
         uglify: {
             options: {
                 sourceMap: true
             },
             app: {
                 cwd: 'dist',
-                src: '*.js',
+                src: [
+                    '*.js',
+                    'config/*.js'
+                ],
                 dest: 'dist',
                 ext: '.min.js',
                 expand: true
@@ -113,7 +148,10 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('test', ['jshint', 'jscs']);
-    grunt.registerTask('default', ['clean', 'test', 'copy', 'concat', 'uglify']);
-    grunt.registerTask('deploy', ['default', 'gh-pages']);
+    grunt.registerTask('default', ['external']);
+    grunt.registerTask('external', ['clean', 'test', 'copy', 'concat', 'replace:external', 'uglify']);
+    grunt.registerTask('internal', ['clean', 'test', 'copy', 'concat', 'replace:internal', 'uglify']);
+    grunt.registerTask('deploy', ['external', 'gh-pages:gh-pages']);
+    grunt.registerTask('deploy-internal', ['internal', 'gh-pages:internal']);
     grunt.registerTask('server', ['connect']);
 };

@@ -1,14 +1,14 @@
 (function(window, angular) {'use strict';
-    var app = angular.module('fields', []);
+    var app = angular.module('fields', ['services.config']);
 
-    app.controller('FieldsController', ['$http', '$q', '$rootScope', function($http, $q, $rootScope) {
+    app.controller('FieldsController', ['$http', '$q', '$rootScope', 'configuration', function($http, $q, $rootScope, configuration) {
         var _this = this;
 
         this.organizationFields = {};
         this.fields = [];
 
         $rootScope.$on('organization.selected', function(event, selectedOrganizations) {
-            var fieldsRequest = $rootScope.solrCore + '/select?q=*&rows=1&fl=extras_*,name&wt=json&json.wrf=JSON_CALLBACK&fq=extras_zckownerorg_bi_strs:',
+            var fieldsRequest = configuration.solrCore + '/select?q=*&rows=1&fl=extras_*,name&wt=json&json.wrf=JSON_CALLBACK&fq=extras_zckownerorg_bi_strs:',
                 fieldsCallback = function(data) {
                     var fq = data.responseHeader.params.fq,
                         org = fq.substr(fq.indexOf(':') + 1);
