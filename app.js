@@ -1,5 +1,5 @@
 (function(window, angular, wb, $) {'use strict';
-    var app = angular.module('reportGenerator', ['organizations', 'advanced-search', 'display-fields', 'services.config']),
+    var app = angular.module('reportGenerator', ['dataset-types', 'advanced-search', 'display-fields', 'services.config']),
         $resultsTable = $('#results');
 
     app.run(['$http', '$rootScope', 'configuration', function($http, $rootScope, configuration) {
@@ -88,7 +88,7 @@
                 url = urlParts.absolute.replace(urlParts.search, '').replace(urlParts.hash, '');
 
             $rootScope.savedUrl = url +
-                '?fq=' + $rootScope.orgCtrl.selectedOrganizations.join(',') +
+                '?fq=' + $rootScope.dataTypeCtrl.selectedDatasetTypes.join(',') +
                 '&q=' + $rootScope.query +
                 '&fl=' + $rootScope.dspFieldCtrl.fields.join(',') +
                 '&rows=' + $rootScope.maxResults;
@@ -100,7 +100,7 @@
                     wt: 'json',
                     'json.wrf': 'JSON_CALLBACK',
                     otherparams: '',
-                    fq: 'zckownerorg_bi_strs:' + $rootScope.orgCtrl.selectedOrganizations.join(' OR '),
+                    fq: 'dataset_type:' + $rootScope.dataTypeCtrl.selectedDatasetTypes.join(' OR '),
                     q: createQuery($rootScope.query),
                     fl: $rootScope.dspFieldCtrl.fields.join(','),
                     rows: parseInt($rootScope.maxResults, 10)

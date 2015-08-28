@@ -1,0 +1,5 @@
+<div class="col-md-2 col-sm-3 col-xs-6" data-ng-repeat="dataType in dataTypeCtrl.datasetTypes">
+    <label class="checkbox-inline" for="{{dataType}}">
+        <input type="checkbox" id="{{dataType}}" checklist-model="dataTypeCtrl.selectedDatasetTypes" checklist-value="dataType" checklist-change="dataTypeCtrl.changed()" /> {{dataType}}
+    </label>
+</div>

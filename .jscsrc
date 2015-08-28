@@ -4,5 +4,6 @@
     "requireTrailingComma": null,
     "disallowMultipleVarDecl": null,
     "requireMultipleVarDecl": true,
-    "maximumLineLength": 500
+    "maximumLineLength": 500,
+    "requireCamelCaseOrUpperCaseIdentifiers": "ignoreProperties"
 }
