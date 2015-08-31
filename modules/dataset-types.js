@@ -1,8 +1,8 @@
 (function(window, angular, wb) {'use strict';
-    var app = angular.module('dataset-types', ['checklist-model']);
+    var app = angular.module('dataset-types', ['checklist-model', 'services.config']);
 
-    app.controller('DatasetTypesController', ['$http', '$rootScope', function($http, $rootScope) {
-        var typesRequest = $rootScope.solrCore + '/select?q=*:*&rows=0&wt=json&json.wrf=JSON_CALLBACK&facet=true&facet.field=dataset_type',
+    app.controller('DatasetTypesController', ['$http', '$rootScope', 'configuration', function($http, $rootScope, configuration) {
+        var typesRequest = configuration.solrCore + '/select?q=*:*&rows=0&wt=json&json.wrf=JSON_CALLBACK&facet=true&facet.field=dataset_type',
             _this = this;
 
         function fromDefault(types) {
