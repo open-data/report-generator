@@ -1,8 +1,8 @@
 (function(window, angular, wb, $) {'use strict';
-    var app = angular.module('reportGenerator', ['organizations', 'advanced-search', 'display-fields']),
+    var app = angular.module('reportGenerator', ['dataset-types', 'advanced-search', 'display-fields', 'services.config']),
         $resultsTable = $('#results');
 
-    app.run(['$http', '$rootScope', function($http, $rootScope) {
+    app.run(['$http', '$rootScope', 'configuration', function($http, $rootScope, configuration) {
 
         function createQuery(keywords) {
             var regexp = /(.*?)((?: (?:OR|AND) )|$)/g;
@@ -34,9 +34,9 @@
 
                     if (field === 'name') {
                         row[field] = '' + cell + ' ' +
-                            '<a target="_blank" href="' + $rootScope.ckanInstance + '/zj/dataset/' + cell + '" class="btn btn-default">' +
+                            '<a target="_blank" href="' + configuration.ckanInstance + '/dataset/' + cell + '" class="btn btn-default">' +
                                 '<span class="glyphicon glyphicon-eye-open"><span class="wb-inv">View ' + cell + '</span></a>' +
-                            '<a target="_blank" href="' + $rootScope.ckanInstance + '/zj/dataset/edit/' + cell + '" class="btn btn-default">' +
+                            '<a target="_blank" href="' + configuration.ckanInstance + '/dataset/edit/' + cell + '" class="btn btn-default">' +
                                 '<span class="glyphicon glyphicon-pencil"><span class="wb-inv">Edit ' + cell + '</span></a>';
                     } else if (typeof cell === 'object') {
                         row[field] = cell.join(',');
@@ -69,8 +69,6 @@
             }
         }
 
-        $rootScope.ckanInstance = 'http://ndmckanq1.stcpaz.statcan.gc.ca';
-        $rootScope.solrCore =  $rootScope.ckanInstance + '/so04';
         $rootScope.query = wb.pageUrlParts.params.q ? decodeURI(wb.pageUrlParts.params.q) : '';
         $rootScope.maxResultsOptions = {
             20: 20,
@@ -90,19 +88,19 @@
                 url = urlParts.absolute.replace(urlParts.search, '').replace(urlParts.hash, '');
 
             $rootScope.savedUrl = url +
-                '?fq=' + $rootScope.orgCtrl.selectedOrganizations.join(',') +
+                '?fq=' + $rootScope.dataTypeCtrl.selectedDatasetTypes.join(',') +
                 '&q=' + $rootScope.query +
                 '&fl=' + $rootScope.dspFieldCtrl.fields.join(',') +
                 '&rows=' + $rootScope.maxResults;
         };
 
         $rootScope.sendQuery = function() {
-            var url = $rootScope.solrCore + '/select',
+            var url = configuration.solrCore + '/select',
                 params = {
                     wt: 'json',
                     'json.wrf': 'JSON_CALLBACK',
                     otherparams: '',
-                    fq: 'zckownerorg_bi_strs:' + $rootScope.orgCtrl.selectedOrganizations.join(' OR '),
+                    fq: 'dataset_type:' + $rootScope.dataTypeCtrl.selectedDatasetTypes.join(' OR '),
                     q: createQuery($rootScope.query),
                     fl: $rootScope.dspFieldCtrl.fields.join(','),
                     rows: parseInt($rootScope.maxResults, 10)

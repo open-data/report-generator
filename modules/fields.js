@@ -1,34 +1,34 @@
 (function(window, angular) {'use strict';
-    var app = angular.module('fields', []);
+    var app = angular.module('fields', ['services.config']);
 
-    app.controller('FieldsController', ['$http', '$q', '$rootScope', function($http, $q, $rootScope) {
+    app.controller('FieldsController', ['$http', '$q', '$rootScope', 'configuration', function($http, $q, $rootScope, configuration) {
         var _this = this;
 
-        this.organizationFields = {};
+        this.datasetTypesFields = {};
         this.fields = [];
 
-        $rootScope.$on('organization.selected', function(event, selectedOrganizations) {
-            var fieldsRequest = $rootScope.solrCore + '/select?q=*&rows=1&fl=extras_*,name&wt=json&json.wrf=JSON_CALLBACK&fq=extras_zckownerorg_bi_strs:',
+        $rootScope.$on('datasetType.selected', function(event, selectedDatasetType) {
+            var fieldsRequest = configuration.solrCore + '/select?q=*&rows=1&fl=extras_*,name&wt=json&json.wrf=JSON_CALLBACK&fq=dataset_type:',
                 fieldsCallback = function(data) {
                     var fq = data.responseHeader.params.fq,
-                        org = fq.substr(fq.indexOf(':') + 1);
+                        type = fq.substr(fq.indexOf(':') + 1);
 
-                    _this.organizationFields[org] = Object.keys(data.response.docs[0]);
-                    newFields = newFields.concat(_this.organizationFields[org]);
+                    _this.datasetTypesFields[type] = Object.keys(data.response.docs[0]);
+                    newFields = newFields.concat(_this.datasetTypesFields[type]);
                 },
                 promises = [],
                 newFields = [],
-                o, org, p;
+                o, type, p;
 
-            for (o = 0; o < selectedOrganizations.length; o += 1) {
-                org = selectedOrganizations[o];
+            for (o = 0; o < selectedDatasetType.length; o += 1) {
+                type = selectedDatasetType[o];
 
-                if (!_this.organizationFields[org]) {
-                    p = $http.jsonp(fieldsRequest + org, {cache: true});
+                if (!_this.datasetTypesFields[type]) {
+                    p = $http.jsonp(fieldsRequest + type, {cache: true});
                     p.success(fieldsCallback);
                     promises.push(p);
                 } else {
-                    newFields = newFields.concat(_this.organizationFields[org]);
+                    newFields = newFields.concat(_this.datasetTypesFields[type]);
                 }
             }
 

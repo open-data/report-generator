@@ -18,7 +18,7 @@
                 });
 
                 // Remove fields that are not reckognized;
-                $rootScope.$on('organization.selected', function(event) {
+                $rootScope.$on('datasetType.selected', function(event) {
                     setTimeout(function() {
                         var fields = $('#displayfield').scope().fieldsCtrl.fields,
                             fieldsIndex;
@@ -48,11 +48,10 @@
 
         this.fields = fromUrl() || [
             'name',
-            'extras_conttype_en_txtm',
+            'extras_content_type_codes',
+            'extras_subject_codes',
             'extras_title_en_txts',
-            'extras_subjnew_en_txtm',
-            'extras_pkuniqueidcode_bi_strs',
-            'extras_zckstatus_bi_txtm'
+            'extras_admin_notes'
         ];
 
         this.getVisible = function() {
