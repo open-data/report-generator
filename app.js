@@ -1,8 +1,8 @@
 (function(window, angular, wb, $) {'use strict';
-    var app = angular.module('reportGenerator', ['organizations', 'advanced-search', 'display-fields']),
+    var app = angular.module('reportGenerator', ['organizations', 'advanced-search', 'display-fields', 'services.config']),
         $resultsTable = $('#results');
 
-    app.run(['$http', '$rootScope', function($http, $rootScope) {
+    app.run(['$http', '$rootScope', 'configuration', function($http, $rootScope, configuration) {
 
         function createQuery(keywords) {
             var regexp = /(.*?)((?: (?:OR|AND) )|$)/g;
@@ -34,9 +34,9 @@
 
                     if (field === 'name') {
                         row[field] = '' + cell + ' ' +
-                            '<a target="_blank" href="' + $rootScope.ckanInstance + '/zj/dataset/' + cell + '" class="btn btn-default">' +
+                            '<a target="_blank" href="' + configuration.ckanInstance + '/dataset/' + cell + '" class="btn btn-default">' +
                                 '<span class="glyphicon glyphicon-eye-open"><span class="wb-inv">View ' + cell + '</span></a>' +
-                            '<a target="_blank" href="' + $rootScope.ckanInstance + '/zj/dataset/edit/' + cell + '" class="btn btn-default">' +
+                            '<a target="_blank" href="' + configuration.ckanInstance + '/dataset/edit/' + cell + '" class="btn btn-default">' +
                                 '<span class="glyphicon glyphicon-pencil"><span class="wb-inv">Edit ' + cell + '</span></a>';
                     } else if (typeof cell === 'object') {
                         row[field] = cell.join(',');
@@ -69,8 +69,6 @@
             }
         }
 
-        $rootScope.ckanInstance = 'http://ndmckanq1.stcpaz.statcan.gc.ca';
-        $rootScope.solrCore =  $rootScope.ckanInstance + '/so04';
         $rootScope.query = wb.pageUrlParts.params.q ? decodeURI(wb.pageUrlParts.params.q) : '';
         $rootScope.maxResultsOptions = {
             20: 20,
@@ -97,7 +95,7 @@
         };
 
         $rootScope.sendQuery = function() {
-            var url = $rootScope.solrCore + '/select',
+            var url = configuration.solrCore + '/select',
                 params = {
                     wt: 'json',
                     'json.wrf': 'JSON_CALLBACK',
@@ -400,16 +398,16 @@ angular.module('checklist-model', [])
 })(window, angular, wb);
 
 (function(window, angular) {'use strict';
-    var app = angular.module('fields', []);
+    var app = angular.module('fields', ['services.config']);
 
-    app.controller('FieldsController', ['$http', '$q', '$rootScope', function($http, $q, $rootScope) {
+    app.controller('FieldsController', ['$http', '$q', '$rootScope', 'configuration', function($http, $q, $rootScope, configuration) {
         var _this = this;
 
         this.organizationFields = {};
         this.fields = [];
 
         $rootScope.$on('organization.selected', function(event, selectedOrganizations) {
-            var fieldsRequest = $rootScope.solrCore + '/select?q=*&rows=1&fl=extras_*,name&wt=json&json.wrf=JSON_CALLBACK&fq=extras_zckownerorg_bi_strs:',
+            var fieldsRequest = configuration.solrCore + '/select?q=*&rows=1&fl=extras_*,name&wt=json&json.wrf=JSON_CALLBACK&fq=extras_zckownerorg_bi_strs:',
                 fieldsCallback = function(data) {
                     var fq = data.responseHeader.params.fq,
                         org = fq.substr(fq.indexOf(':') + 1);
@@ -450,10 +448,10 @@ angular.module('checklist-model', [])
 })(window, angular);
 
 (function(window, angular, wb) {'use strict';
-    var app = angular.module('organizations', ['checklist-model']);
+    var app = angular.module('organizations', ['checklist-model', 'services.config']);
 
-    app.controller('OrganizationsController', ['$http', '$rootScope', function($http, $rootScope) {
-        var orgRequest = $rootScope.ckanInstance + '/zj/api/3/action/organization_list?callback=JSON_CALLBACK',
+    app.controller('OrganizationsController', ['$http', '$rootScope', 'configuration', function($http, $rootScope, configuration) {
+        var orgRequest = configuration.ckanInstance + '/api/3/action/organization_list?callback=JSON_CALLBACK',
             _this = this;
 
         function fromURL() {
