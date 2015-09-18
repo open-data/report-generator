@@ -14,19 +14,19 @@
                         fields = data.result.dataset_fields,
                         fieldsLength = fields.length,
                         result = [],
-                        languages = ['en', 'fr'],
+                        languages = data.result.form_languages,
                         languagesLength = languages.length,
                         f, field, l;
 
                     for (f = 0; f < fieldsLength; f += 1) {
                         field = fields[f];
 
-                        if (field.schema_field_type !== 'fluent') {
-                            result.push(field.field_name);
-                        } else {
+                        if (field.schema_field_type === 'fluent' || (field.preset && field.preset.indexOf('fluent') !== -1)) {
                             for (l = 0; l < languagesLength; l += 1) {
                                 result.push(field.field_name + '_' + languages[l]);
                             }
+                        } else {
+                            result.push(field.field_name);
                         }
                     }
 
