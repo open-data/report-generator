@@ -48,10 +48,10 @@
 
         this.fields = fromUrl() || [
             'name',
-            'extras_content_type_codes',
-            'extras_subject_codes',
-            'extras_title_en_txts',
-            'extras_admin_notes'
+            'content_type_codes',
+            'subject_codes',
+            'title_en',
+            'admin_notes_en'
         ];
 
         this.getVisible = function() {
