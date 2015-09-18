@@ -127,6 +127,16 @@ module.exports = function(grunt) {
                 src: 'config/config.js',
                 dest: 'dist',
                 expand: true
+            },
+            local: {
+                options: {
+                    patterns: [{
+                        json: grunt.file.readJSON('./config/environments/local.json')
+                    }]
+                },
+                src: 'config/config.js',
+                dest: 'dist',
+                expand: true
             }
         },
 
@@ -151,6 +161,7 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['external']);
     grunt.registerTask('external', ['clean', 'test', 'copy', 'concat', 'replace:external', 'uglify']);
     grunt.registerTask('internal', ['clean', 'test', 'copy', 'concat', 'replace:internal', 'uglify']);
+    grunt.registerTask('local', ['clean', 'test', 'copy', 'concat', 'replace:local', 'uglify']);
     grunt.registerTask('deploy', ['external', 'gh-pages:gh-pages']);
     grunt.registerTask('deploy-internal', ['internal', 'gh-pages:internal']);
     grunt.registerTask('server', ['connect']);
