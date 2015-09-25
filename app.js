@@ -401,23 +401,21 @@ angular.module('checklist-model', [])
                     }
                 });
 
-                // Remove fields that are not reckognized;
-                $rootScope.$on('datasetType.selected', function(event) {
-                    setTimeout(function() {
-                        var fields = $('#displayfield').scope().fieldsCtrl.fields,
-                            fieldsIndex;
+                // Remove fields that are not recognized;
+                /*$rootScope.$on('datasetType.selected', function(event) {
+                    var fields = $('#displayfield').scope().fieldsCtrl.fields,
+                        fieldsIndex;
 
-                        _this.fields = _this.fields.filter(function(f) {
-                            if (fields.indexOf(f) === -1) {
-                                return false;
-                            }
+                    _this.fields = _this.fields.filter(function(f) {
+                        if (fields.indexOf(f) === -1) {
+                            return false;
+                        }
 
-                            return true;
-                        });
+                        return true;
+                    });
 
-                        $rootScope.$apply();
-                    }, 500);
-                });
+                    $rootScope.$apply();
+                });*/
 
                 return fields;
             }
@@ -432,10 +430,10 @@ angular.module('checklist-model', [])
 
         this.fields = fromUrl() || [
             'name',
-            'extras_content_type_codes',
-            'extras_subject_codes',
-            'extras_title_en_txts',
-            'extras_admin_notes'
+            'content_type_codes',
+            'subject_codes',
+            'title_en',
+            'admin_notes_en'
         ];
 
         this.getVisible = function() {
@@ -479,12 +477,32 @@ angular.module('checklist-model', [])
         this.fields = [];
 
         $rootScope.$on('datasetType.selected', function(event, selectedDatasetType) {
-            var fieldsRequest = configuration.solrCore + '/select?q=*&rows=1&fl=extras_*,name&wt=json&json.wrf=JSON_CALLBACK&fq=dataset_type:',
+            var fieldsRequest = configuration.ckanInstance + '/api/3/action/scheming_dataset_schema_show?callback=JSON_CALLBACK&type=',
                 fieldsCallback = function(data) {
-                    var fq = data.responseHeader.params.fq,
-                        type = fq.substr(fq.indexOf(':') + 1);
+                    var type = data.result.dataset_type,
+                        fields = data.result.dataset_fields,
+                        fieldsLength = fields.length,
+                        result = [],
+                        languages = data.result.form_languages,
+                        languagesLength = languages.length,
+                        f, field, l;
 
-                    _this.datasetTypesFields[type] = Object.keys(data.response.docs[0]);
+                    for (f = 0; f < fieldsLength; f += 1) {
+                        field = fields[f];
+
+                        if (field.schema_field_type === 'fluent' || (field.preset && field.preset.indexOf('fluent') !== -1)) {
+                            for (l = 0; l < languagesLength; l += 1) {
+                                result.push(field.field_name + '_' + languages[l]);
+                            }
+                        } else {
+                            result.push(field.field_name);
+                        }
+                    }
+
+                    _this.datasetTypesFields[type] = result;
+                    addFields(type);
+                },
+                addFields = function(type) {
                     newFields = newFields.concat(_this.datasetTypesFields[type]);
                 },
                 promises = [],
@@ -499,7 +517,7 @@ angular.module('checklist-model', [])
                     p.success(fieldsCallback);
                     promises.push(p);
                 } else {
-                    newFields = newFields.concat(_this.datasetTypesFields[type]);
+                    addFields(type);
                 }
             }
 
