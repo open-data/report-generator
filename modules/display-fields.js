@@ -17,23 +17,21 @@
                     }
                 });
 
-                // Remove fields that are not reckognized;
-                $rootScope.$on('datasetType.selected', function(event) {
-                    setTimeout(function() {
-                        var fields = $('#displayfield').scope().fieldsCtrl.fields,
-                            fieldsIndex;
+                // Remove fields that are not recognized;
+                /*$rootScope.$on('datasetType.selected', function(event) {
+                    var fields = $('#displayfield').scope().fieldsCtrl.fields,
+                        fieldsIndex;
 
-                        _this.fields = _this.fields.filter(function(f) {
-                            if (fields.indexOf(f) === -1) {
-                                return false;
-                            }
+                    _this.fields = _this.fields.filter(function(f) {
+                        if (fields.indexOf(f) === -1) {
+                            return false;
+                        }
 
-                            return true;
-                        });
+                        return true;
+                    });
 
-                        $rootScope.$apply();
-                    }, 500);
-                });
+                    $rootScope.$apply();
+                });*/
 
                 return fields;
             }
