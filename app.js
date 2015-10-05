@@ -1,6 +1,21 @@
 (function(window, angular, wb, $) {'use strict';
     var app = angular.module('reportGenerator', ['dataset-types', 'advanced-search', 'display-fields', 'services.config']),
-        $resultsTable = $('#results');
+        $resultsTable = $('#results'),
+        queryDefaults = {
+            wt: 'json',
+            'json.wrf': 'JSON_CALLBACK',
+            otherparams: ''
+        },
+        datatableDefaults = {
+            columnDefs: [
+                {
+                    className: 'nowrap right',
+                    targets: [0]
+                }
+            ],
+            pageLength: 100,
+            lengthMenu: [[50, 100, 200, 500, -1], [50, 100, 200, 500, 'All']]
+        };
 
     app.run(['$http', '$rootScope', 'configuration', function($http, $rootScope, configuration) {
 
@@ -13,7 +28,7 @@
 
             keywords = keywords.replace(regexp, function(match, key, sep) {
                 if (key.length !== 0 && !key.match(/:[\(\[].*?[\)\]]/)) {
-                    key = 'entext:(' + key + ')';
+                    key = 'entext:(*' + key + '*)';
                 }
                 return key + sep;
             });
@@ -96,15 +111,12 @@
 
         $rootScope.sendQuery = function() {
             var url = configuration.solrCore + '/select',
-                params = {
-                    wt: 'json',
-                    'json.wrf': 'JSON_CALLBACK',
-                    otherparams: '',
+                params = $.extend(queryDefaults, {
                     fq: 'dataset_type:' + $rootScope.dataTypeCtrl.selectedDatasetTypes.join(' OR '),
                     q: createQuery($rootScope.query),
                     fl: $rootScope.dspFieldCtrl.fields.join(','),
                     rows: parseInt($rootScope.maxResults, 10)
-                };
+                });
 
             $http.jsonp(url, {params: params})
                 .then(function(data) {
@@ -113,18 +125,10 @@
                     $rootScope.downloadLink = data.config.url + '?' + $.param($.extend({}, data.config.params, {wt: 'csv'}));
 
                     var fields = data.data.responseHeader.params.fl.split(','),
-                        datatable = {
+                        datatable = $.extend(datatableDefaults, {
                             data: sanitizeData($rootScope.queryResults.docs, fields),
                             columns: createFieldsMapping(fields),
-                            columnDefs: [
-                                {
-                                    className: 'nowrap right',
-                                    targets: [0]
-                                }
-                            ],
-                            pageLength: 100,
-                            lengthMenu: [[50, 100, 200, 500, -1], [50, 100, 200, 500, 'All']]
-                        };
+                        });
 
                     $resultsTable
                         .DataTable().destroy();
@@ -134,6 +138,9 @@
                         .removeClass('wb-tables-inited wb-init')
                         .attr('data-wb-tables', JSON.stringify(datatable))
                         .trigger('wb-init.wb-tables');
+                }, function() {
+                    delete $rootScope.queryResults;
+                    $rootScope.queryError = true;
                 });
         };
     }]);
