@@ -138,6 +138,9 @@
                         .removeClass('wb-tables-inited wb-init')
                         .attr('data-wb-tables', JSON.stringify(datatable))
                         .trigger('wb-init.wb-tables');
+                }, function() {
+                    delete $rootScope.queryResults;
+                    $rootScope.queryError = true;
                 });
         };
     }]);

@@ -141,12 +141,16 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
     </div>
 </form>
 
-<div ng-show="queryResults" style="">
+<div ng-show="queryResults">
     <h2>Results</h2>
     <p>Total number of records found: <span ng-bind="queryResultsCount"></span></p>
     <!-- Hack to preload datatables -->
     <table id="results" class="table table-striped table-responsive wb-tables" data-wb-tables='{"data":[["a"]],"columns":[{"title":"a"}]}'></table>
     <a href="{{downloadLink}}" class="btn btn-default" download>Download CSV</a>
+</div>
+<div class="alert alert-danger" role="alert" ng-show="queryError">
+  <h2>Error:</h2>
+  An error occured while running the query.
 </div>
 
 <!-- Insert: Templates -->
