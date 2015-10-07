@@ -1,3 +1,5 @@
+
+
 (function(window, angular) {'use strict';
     var app = angular.module('fields', ['services.config']);
 
@@ -13,20 +15,21 @@
                     var type = data.result.dataset_type,
                         fields = data.result.dataset_fields,
                         fieldsLength = fields.length,
-                        result = [],
+                        result = {},
                         languages = data.result.form_languages,
                         languagesLength = languages.length,
-                        f, field, l;
+                        f, field, l, fieldObj;
 
                     for (f = 0; f < fieldsLength; f += 1) {
                         field = fields[f];
+                        fieldObj = {type: field.schema_field_type};
 
                         if (field.schema_field_type === 'fluent' || (field.preset && field.preset.indexOf('fluent') !== -1)) {
                             for (l = 0; l < languagesLength; l += 1) {
-                                result.push(field.field_name + '_' + languages[l]);
+                                result[field.field_name + '_' + languages[l]] = fieldObj;
                             }
                         } else {
-                            result.push(field.field_name);
+                            result[field.field_name] = fieldObj;
                         }
                     }
 
@@ -34,7 +37,7 @@
                     addFields(type);
                 },
                 addFields = function(type) {
-                    newFields = newFields.concat(_this.datasetTypesFields[type]);
+                    newFields = newFields.concat(Object.keys(_this.datasetTypesFields[type]));
                 },
                 promises = [],
                 newFields = [],
