@@ -148,9 +148,10 @@ summary.h5{margin-top:0;}
 <div ng-show="queryResults">
     <h2>Results</h2>
     <p>Total number of records found: <span ng-bind="queryResultsCount"></span></p>
+    <a href="{{downloadLink}}" class="btn btn-default" download><span class="glyphicon glyphicon-download"></span> Download CSV</a>
     <!-- Hack to preload datatables -->
     <table id="results" class="table table-striped table-responsive wb-tables" data-wb-tables='{"data":[["a"]],"columns":[{"title":"a"}]}'></table>
-    <a href="{{downloadLink}}" class="btn btn-default" download>Download CSV</a>
+    <a href="{{downloadLink}}" class="btn btn-default" download><span class="glyphicon glyphicon-download"></span> Download CSV</a>
 </div>
 <div class="alert alert-danger" role="alert" ng-show="queryError">
   <h2>Error:</h2>
