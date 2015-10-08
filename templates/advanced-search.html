@@ -1,69 +1,36 @@
-<div class="form-group col-sm-3">
-    <label for="fields" class="control-label">Field</label>
-    <select class="form-control" id="fields" style="width:100%" ng-model="advSrchCtrl.field" ng-controller="FieldsController as fieldsCtrl" ng-options="field as field for field in fieldsCtrl.fields">
-    </select>
-</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group col-sm-3">
+            <label for="fields" class="control-label">Field</label>
+            <select class="form-control" id="fields" style="width:100%" ng-model="advSrchCtrl.field" ng-controller="FieldsController as fieldsCtrl" ng-options="field as field for field in fieldsCtrl.fields">
+            </select>
+        </div>
 
-<div class="form-group col-sm-5">
-    <label for="fieldkey" class="control-label">Keywords for field:</label>
-    <input type="text" id="fieldkey" class="form-control" style="width:100%" ng-model="advSrchCtrl.keyword" ng-disabled="advSrchCtrl.emptyKey" />
-</div>
+        <div class="form-group col-sm-5">
+            <label for="fieldkey" class="control-label">Keywords for field:</label>
+            <input type="text" id="fieldkey" class="form-control" style="width:100%" ng-model="advSrchCtrl.keyword" ng-disabled="advSrchCtrl.emptyKey" />
+        </div>
 
-<div class="form-group col-sm-4">
-    <br class="hidden-xs"/>
-    <label for="empty">
-        <input type="checkbox" id="empty" ng-model="advSrchCtrl.emptyKey" />
-        Empty
-    </label>
-</div>
+        <div class="form-group col-sm-4">
+            <br class="hidden-xs"/>
+            <label for="empty">
+                <input type="checkbox" id="empty" ng-model="advSrchCtrl.emptyKey" />
+                Empty
+            </label>
+        </div>
 
-<div class="form-group col-sm-12">
-    <label for="op" class="control-label">Operator:</label>
-    <select id="op" class="form-control" ng-model="advSrchCtrl.operator" ng-disabled="advSrchCtrl.emptyKey">
-        <option value="OR">OR</option>
-        <option value="AND">AND</option>
-        <option value="OR NOT">OR NOT</option>
-        <option value="AND NOT">AND NOT</option>
-    </select>
-</div>
+        <div class="form-group col-sm-12">
+            <label for="op" class="control-label">Operator:</label>
+            <select id="op" class="form-control" ng-model="advSrchCtrl.operator" ng-disabled="advSrchCtrl.emptyKey">
+                <option value="OR">OR</option>
+                <option value="AND">AND</option>
+                <option value="OR NOT">OR NOT</option>
+                <option value="AND NOT">AND NOT</option>
+            </select>
+        </div>
 
-<div class="form-group col-sm-12">
-    <button id="add_query" type="button" class="btn btn-default" ng-click="advSrchCtrl.addField()">Add</button>
+        <div class="form-group col-sm-12">
+            <button id="add_query" type="button" class="btn btn-default" ng-click="advSrchCtrl.addField()">Add</button>
+        </div>
+    </div>
 </div>
-<details>
-    <summary>Examples:</summary>
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Description</th>
-                <th>Search Format</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>search for "Perinatal mortality" in all English and Bilingual fields</td>
-                <td>entext:"Perinatal mortality"</td>
-            </tr>
-            <tr>
-                <td>find record with given 10uid</td>
-                <td>extras_10uid_bi_strs:primary100012</td>
-            </tr>
-            <tr>
-                <td> records beginning with "im" in 10uid field</td>
-                <td>extras_10uid_bi_strs:im*</td>
-            </tr>
-            <tr>
-                <td>records with "Canada" in the English title</td>
-                <td>extras_title_en_txts:Canada</td>
-            </tr>
-            <tr>
-                <td>records with  "Metropolitan Area" in geolevel field</td>
-                <td>extras_geolevel_en_txtm:*Metropolitan?Area*</td>
-            </tr>
-            <tr>
-                <td>10uid begins with "primary" OR 10uid begins with "second"</td>
-                <td>extras_10uid_bi_strs:primary*+OR+extras_10uid_bi_strs:second*</td>
-            </tr>
-          </tbody>
-    </table>
-</details>
