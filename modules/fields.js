@@ -1,10 +1,10 @@
-
-
 (function(window, angular) {'use strict';
     var app = angular.module('fields', ['services.config']);
 
     app.controller('FieldsController', ['$http', '$q', '$rootScope', 'configuration', function($http, $q, $rootScope, configuration) {
         var _this = this;
+
+        $rootScope.fieldsCtrl = this;
 
         this.datasetTypesFields = {};
         this.fields = [];
@@ -37,10 +37,10 @@
                     addFields(type);
                 },
                 addFields = function(type) {
-                    newFields = newFields.concat(Object.keys(_this.datasetTypesFields[type]));
+                    $.extend(newFields, _this.datasetTypesFields[type]);
                 },
                 promises = [],
-                newFields = [],
+                newFields = {},
                 o, type, p;
 
             for (o = 0; o < selectedDatasetType.length; o += 1) {
@@ -57,15 +57,8 @@
 
             $q.all(promises)
                 .then(function() {
-                    _this.fields = [];
-
-                    newFields.forEach(function(val, index, array) {
-                        if (_this.fields.indexOf(val) === -1) {
-                            _this.fields.push(val);
-                        }
-                    });
-
-                    _this.fields.sort();
+                    _this.fields = Object.keys(newFields);
+                    _this.fieldsDef = newFields;
                 });
         });
     }]);

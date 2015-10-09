@@ -6,20 +6,48 @@
         this.operator = 'AND';
         this.keyword = '';
 
+        this.onEmptyChanged = function() {
+            if (this.emptyKey) {
+                this.operator = 'AND';
+            }
+        };
+
         this.addField = function() {
-            var actualOperator = '',
+            var getExpression = function() {
+                    var escapeKeyword = function(keyword) {
+                            return keyword.replace(/:/g, '\\:');
+                        },
+                        prefix = this.field + ':',
+                        keyword = this.keyword,
+                        type;
+
+                    if (this.emptyKey) {
+                        return '-' + prefix + '[* TO *]';
+                    } else {
+                        type = $rootScope.fieldsCtrl.fieldsDef[this.field].type;
+                        switch (type) {
+                            case 'date': {
+                                try {
+                                    keyword = new Date(keyword).toISOString();
+                                } catch (e) {}
+                                return prefix + '(' + escapeKeyword(keyword) + ')';
+                            }
+                        }
+                    }
+
+                    return prefix + '(*' + escapeKeyword(keyword) + '*)';
+                },
+                operatorStr = '',
                 expr;
 
             if (this.field && (this.keyword || this.emptyKey)) {
-                expr = this.emptyKey ?
-                    '-' + this.field + ':' + '["" TO *]' :
-                    this.field + ':(*' + this.keyword + '*)';
+                expr = getExpression.apply(this);
 
                 if ($rootScope.query && $rootScope.query.trim() !== '') {
-                    actualOperator = ' ' + (this.emptyKey ? 'AND' : this.operator) + ' ';
+                    operatorStr = ' ' + (this.operator) + ' ';
                 }
 
-                $rootScope.query += actualOperator + expr;
+                $rootScope.query += operatorStr + expr;
 
                 this.keyword = '';
             }

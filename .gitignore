@@ -2,6 +2,7 @@
 node_modules
 dist
 .grunt
+local.json
 
 *.log
 *.sublime-*
