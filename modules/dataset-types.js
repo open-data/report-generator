@@ -2,8 +2,9 @@
     var app = angular.module('dataset-types', ['checklist-model', 'services.config']);
 
     app.controller('DatasetTypesController', ['$http', '$rootScope', 'configuration', function($http, $rootScope, configuration) {
-        var typesRequest = configuration.solrCore + '/select?q=*:*&rows=0&wt=json&json.wrf=JSON_CALLBACK&facet=true&facet.field=dataset_type',
-            _this = this;
+        var typesRequest = configuration.solrCore + '/select?q=*:*&rows=0&wt=json&facet=true&facet.field=dataset_type',
+            _this = this,
+            httpMethod = $http.get;
 
         function fromDefault(types) {
             var notSelected = [
@@ -41,24 +42,31 @@
             return null;
         }
 
+        function querySuccess(data) {
+            var types = data.data.facet_counts.facet_fields.dataset_type.filter(function(value) {
+                if (typeof value == 'string') {
+                    return true;
+                }
+
+                return false;
+            });
+
+            _this.datasetTypes = types;
+            _this.selectedDatasetTypes = fromURL() || fromDefault(types);
+            _this.changed();
+        }
+
         this.changed = function() {
             $rootScope.$emit('datasetType.selected', this.selectedDatasetTypes);
         };
 
-        $http.jsonp(typesRequest)
-            .then(function(data) {
-                var types = data.data.facet_counts.facet_fields.dataset_type.filter(function(value) {
-                    if (typeof value == 'string') {
-                        return true;
-                    }
+        if (configuration.solrCore.indexOf(configuration.ckanInstance) === -1) {
+            typesRequest += '&json.wrf=JSON_CALLBACK';
+            httpMethod = $http.jsonp(typesRequest);
+        }
 
-                    return false;
-                });
-
-                _this.datasetTypes = types;
-                _this.selectedDatasetTypes = fromURL() || fromDefault(types);
-                _this.changed();
-            });
+        httpMethod(typesRequest)
+                .then(querySuccess);
     }]);
 
     app.directive('datasetTypes', function() {

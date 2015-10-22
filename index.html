@@ -155,7 +155,8 @@ summary.h5{margin-top:0;}
 </div>
 <div class="alert alert-danger" role="alert" ng-show="queryError">
   <h2>Error:</h2>
-  An error occured while running the query.
+  <span ng-hide="queryErrorMessage">An error occured while running the query.</span>
+  <span ng-show="queryErrorMessage">{{queryErrorMessage}}</span>
 </div>
 
 <!-- Insert: Templates -->
