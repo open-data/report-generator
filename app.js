@@ -3,7 +3,6 @@
         $resultsTable = $('#results'),
         queryDefaults = {
             wt: 'json',
-            'json.wrf': 'JSON_CALLBACK',
             otherparams: ''
         },
         datatableDefaults = {
@@ -116,9 +115,15 @@
                     q: createQuery($rootScope.query),
                     fl: $rootScope.dspFieldCtrl.fields.join(','),
                     rows: parseInt($rootScope.maxResults, 10)
-                });
+                }),
+                httpMethod = $http.get;
 
-            $http.jsonp(url, {params: params})
+            if (configuration.solrCore.indexOf(configuration.ckanInstance) === -1) {
+                httpMethod = $http.jsonp;
+                params['json.wrf'] = 'JSON_CALLBACK';
+            }
+
+            httpMethod(url, {params: params})
                 .then(function(data) {
                     $rootScope.queryError = false;
                     $rootScope.queryResultsCount = data.data.response.numFound;
@@ -139,9 +144,13 @@
                         .removeClass('wb-tables-inited wb-init')
                         .attr('data-wb-tables', JSON.stringify(datatable))
                         .trigger('wb-init.wb-tables');
-                }, function() {
+                }, function(response) {
                     delete $rootScope.queryResults;
                     $rootScope.queryError = true;
+
+                    if (response && response.data && response.data.error && response.data.error.msg) {
+                        $rootScope.queryErrorMessage = response.data.error.msg;
+                    }
                 });
         };
     }]);
