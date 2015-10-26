@@ -62,7 +62,7 @@
 
         if (configuration.solrCore.indexOf(configuration.ckanInstance) === -1) {
             typesRequest += '&json.wrf=JSON_CALLBACK';
-            httpMethod = $http.jsonp(typesRequest);
+            httpMethod = $http.jsonp;
         }
 
         httpMethod(typesRequest)
