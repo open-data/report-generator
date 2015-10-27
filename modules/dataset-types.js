@@ -2,7 +2,7 @@
     var app = angular.module('dataset-types', ['checklist-model', 'services.config']);
 
     app.controller('DatasetTypesController', ['$http', '$rootScope', 'configuration', function($http, $rootScope, configuration) {
-        var typesRequest = configuration.solrCore + '/select?q=*:*&rows=0&wt=json&facet=true&facet.field=dataset_type',
+        var typesRequest = configuration.solrCore + '/select?fq=site_id:' + configuration.siteID + '&q=*:*&rows=0&wt=json&facet=true&facet.field=dataset_type',
             _this = this,
             httpMethod = $http.get;
 
