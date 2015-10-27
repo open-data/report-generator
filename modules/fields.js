@@ -57,7 +57,7 @@
 
             $q.all(promises)
                 .then(function() {
-                    _this.fields = Object.keys(newFields);
+                    _this.fields = Object.keys(newFields).sort();
                     _this.fieldsDef = newFields;
                 });
         });
