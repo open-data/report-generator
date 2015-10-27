@@ -3,7 +3,8 @@
     angular.module('services.config', [])
         .constant('configuration', {
             ckanInstance: '@@ckanInstance',
-            solrCore: '@@solrCore'
+            solrCore: '@@solrCore',
+            siteID: '@@siteID'
         });
 
 })(window, angular);

@@ -1,4 +1,5 @@
 {
   "ckanInstance": "http://ndmckanq1.stcpaz.statcan.gc.ca/zj",
-  "solrCore": "http://ndmckanq1.stcpaz.statcan.gc.ca/so04"
+  "solrCore": "http://ndmckanq1.stcpaz.statcan.gc.ca/so04",
+  "siteID": "stcndm"
 }
