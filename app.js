@@ -2,8 +2,7 @@
     var app = angular.module('reportGenerator', ['dataset-types', 'advanced-search', 'display-fields', 'services.config']),
         $resultsTable = $('#results'),
         queryDefaults = {
-            wt: 'json',
-            otherparams: ''
+            wt: 'json'
         },
         datatableDefaults = {
             columnDefs: [

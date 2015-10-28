@@ -30,6 +30,12 @@
                             }
                         } else {
                             result[field.field_name] = fieldObj;
+
+                            if (field.lookup) {
+                                for (l = 0; l < languagesLength; l += 1) {
+                                    result[field.field_name + '_desc_' + languages[l]] = fieldObj;
+                                }
+                            }
                         }
                     }
 
