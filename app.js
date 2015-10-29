@@ -26,7 +26,7 @@
 
             keywords = keywords.replace(regexp, function(match, key, sep) {
                 if (key.length !== 0 && !key.match(/:[\(\[].*?[\)\]]/)) {
-                    key = 'entext:(*' + key + '*)';
+                    key = '(text:(' + key + ') OR text:(*' + key + '*) OR text:(*' + key + ') OR text:(' + key + '*))';
                 }
                 return key + sep;
             });
