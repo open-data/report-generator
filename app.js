@@ -1,3 +1,4 @@
+
 (function(window, angular, wb, $) {'use strict';
     var app = angular.module('reportGenerator', ['dataset-types', 'advanced-search', 'display-fields', 'services.config']),
         $resultsTable = $('#results'),
@@ -26,7 +27,7 @@
 
             keywords = keywords.replace(regexp, function(match, key, sep) {
                 if (key.length !== 0 && !key.match(/:[\(\[].*?[\)\]]/)) {
-                    key = '(text:(' + key + ') OR text:(*' + key + '*) OR text:(*' + key + ') OR text:(' + key + '*))';
+                    key = 'text:(*' + key + '*)';
                 }
                 return key + sep;
             });
