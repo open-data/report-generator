@@ -2,6 +2,7 @@
 (function(window, angular, wb, $) {'use strict';
     var app = angular.module('reportGenerator', ['dataset-types', 'advanced-search', 'display-fields', 'services.config']),
         $resultsTable = $('#results'),
+        maxFieldItems = 100,
         queryDefaults = {
             wt: 'json'
         },
@@ -53,7 +54,7 @@
                             '<a target="_blank" href="' + configuration.ckanInstance + '/dataset/edit/' + cell + '" class="btn btn-default">' +
                                 '<span class="glyphicon glyphicon-pencil"><span class="wb-inv">Edit ' + cell + '</span></a>';
                     } else if (typeof cell === 'object') {
-                        row[field] = cell.join(',');
+                        row[field] = cell.splice(0, maxFieldItems).join(',');
                     }
                 }
             }
