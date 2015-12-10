@@ -2,13 +2,24 @@
     <div class="col-md-12">
         <div class="form-group col-sm-3">
             <label for="fields" class="control-label">Field</label>
-            <select class="form-control" id="fields" style="width:100%" ng-model="advSrchCtrl.field" ng-controller="FieldsController as fieldsCtrl" ng-options="field as field for field in fieldsCtrl.fields">
+            <select class="form-control" id="fields" style="width:100%" ng-model="advSrchCtrl.field" ng-controller="FieldsController as fieldsCtrl" ng-options="field as field for field in fieldsCtrl.fields" ng-change="advSrchCtrl.onFieldChange()">
             </select>
         </div>
 
-        <div class="form-group col-sm-5">
+        <div class="form-group col-sm-5" ng-show="advSrchCtrl.fieldType != 'date'">
             <label for="fieldkey" class="control-label">Keywords for field:</label>
             <input type="text" id="fieldkey" class="form-control" style="width:100%" ng-model="advSrchCtrl.keyword" ng-disabled="advSrchCtrl.emptyKey" />
+        </div>
+
+        <div class="form-group col-sm-5" ng-show="advSrchCtrl.fieldType == 'date'">
+            <div class="col-xs-6">
+                <label for="startdate">Start Date</label>
+                <input type="text" id="startdate" class="form-control" ng-model="advSrchCtrl.startDate" />
+            </div>
+            <div class="col-xs-6">
+                <label for="enddate">End Date</label>
+                <input type="text" id="enddate" class="form-control" ng-model="advSrchCtrl.endDate" />
+            </div>
         </div>
 
         <div class="form-group col-sm-4">
