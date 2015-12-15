@@ -2,22 +2,24 @@
     <fieldset class="col-md-12">
         <div class="col-md-12">
             <legend class="h4">Fields to display:</legend>
-            
+
             <div class="row">
                 <div class="form-group form-horizontal col-sm-3">
                     <label for="displayfield" class="wb-inv">Field to display:</label>
                     <select class="form-control" id="displayfield" style="width:100%;" ng-model="dspFieldCtrl.field" ng-controller="FieldsController as fieldsCtrl" ng-options="field as field for field in fieldsCtrl.fields"></select>
                 </div>
-                
+
                 <div class="form-group col-sm-9">
                     <button id="add_display_field" type="button" class="btn btn-default" ng-click="dspFieldCtrl.addField()">Add</button>
                 </div>
             </div>
-            
+
             <table class="table" ng-show="dspFieldCtrl.getVisible()">
                 <thead>
-                    <th>Field</th>
-                    <th>Action</th>
+                    <tr>
+                        <th>Field</th>
+                        <th>Action</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="field in dspFieldCtrl.fields">
