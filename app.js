@@ -47,13 +47,7 @@
 
                     row[field] = cell || '';
 
-                    if (field === 'name') {
-                        row[field] = '' + cell + ' ' +
-                            '<a target="_blank" href="' + configuration.ckanInstance + '/dataset/' + cell + '" class="btn btn-default">' +
-                                '<span class="glyphicon glyphicon-eye-open"><span class="wb-inv">View ' + cell + '</span></a>' +
-                            '<a target="_blank" href="' + configuration.ckanInstance + '/dataset/edit/' + cell + '" class="btn btn-default">' +
-                                '<span class="glyphicon glyphicon-pencil"><span class="wb-inv">Edit ' + cell + '</span></a>';
-                    } else if (typeof cell === 'object') {
+                    if (typeof cell === 'object') {
                         row[field] = cell.splice(0, maxFieldItems).join(',');
                     }
                 }
@@ -135,16 +129,25 @@
                         datatable = $.extend(datatableDefaults, {
                             data: sanitizeData($rootScope.queryResults.docs, fields),
                             columns: createFieldsMapping(fields),
+                            fnRowCallback: function(row, data) {
+                                var name = data.name,
+                                    $firstCell = $(row.firstChild);
+
+                                if ($firstCell.find('a').length === 0) {
+                                    $firstCell.append(
+                                        '<a target="_blank" href="' + configuration.ckanInstance + '/dataset/' + name + '" class="btn btn-default">' +
+                                            '<span class="glyphicon glyphicon-eye-open"><span class="wb-inv">View ' + name + '</span></a>' +
+                                        '<a target="_blank" href="' + configuration.ckanInstance + '/dataset/edit/' + name + '" class="btn btn-default">' +
+                                            '<span class="glyphicon glyphicon-pencil"><span class="wb-inv">Edit ' + name + '</span></a>'
+                                    );
+                                }
+                            }
                         });
 
-                    $resultsTable
-                        .DataTable().destroy();
+                    $resultsTable.DataTable().destroy();
+                    $resultsTable.empty();
 
-                    $resultsTable
-                        .empty()
-                        .removeClass('wb-tables-inited wb-init')
-                        .attr('data-wb-tables', JSON.stringify(datatable))
-                        .trigger('wb-init.wb-tables');
+                    $resultsTable.dataTable(datatable);
                 }, function(response) {
                     delete $rootScope.queryResults;
                     $rootScope.queryError = true;
