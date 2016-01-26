@@ -126,7 +126,7 @@
                     $rootScope.downloadLink = data.config.url + '?' + $.param($.extend({}, data.config.params, {wt: 'csv', 'csv.mv.separator': '·', rows: 999999999}));
 
                     var fields = data.data.responseHeader.params.fl.split(','),
-                        datatable = $.extend(datatableDefaults, {
+                        datatable = $.extend({}, datatableDefaults, {
                             data: sanitizeData($rootScope.queryResults.docs, fields),
                             columns: createFieldsMapping(fields),
                             fnRowCallback: function(row, data) {
