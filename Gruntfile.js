@@ -27,6 +27,8 @@ module.exports = function(grunt) {
     }
 
     grunt.initConfig({
+        pkg: grunt.file.readJSON('package.json'),
+
         clean: {
             src: 'dist'
         },
@@ -54,6 +56,9 @@ module.exports = function(grunt) {
 
         concat: {
             js: {
+                options: {
+                    banner: '/*!\n * Report Generator\n * v<%= pkg.version %>\n */'
+                },
                 src: [
                     'app.js',
                     'lib/checklist-model/checklist-model.js',
@@ -142,7 +147,8 @@ module.exports = function(grunt) {
 
         uglify: {
             options: {
-                sourceMap: true
+                sourceMap: true,
+                preserveComments: 'some'
             },
             app: {
                 cwd: 'dist',
