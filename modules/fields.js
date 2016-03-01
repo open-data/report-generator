@@ -45,9 +45,17 @@
                 },
                 fieldErrorCallback = function(response) {
                     var type = response.config.url.match(/type=([^&]*)/)[1],
-                        types = $rootScope.dataTypeCtrl.datasetTypes;
+                        types = $rootScope.dataTypeCtrl.datasetTypes,
+                        typeIndex = types.indexOf(type),
+                        selectedTypeIndex = selectedDatasetType.indexOf(type);
 
-                    types.splice(types.indexOf(type), 1);
+                    if (selectedTypeIndex !== -1) {
+                        selectedDatasetType.splice(selectedTypeIndex, 1);
+                    }
+
+                    if (typeIndex !== -1) {
+                        types.splice(typeIndex, 1);
+                    }
                 },
                 addFields = function(type) {
                     $.extend(newFields, _this.datasetTypesFields[type]);
